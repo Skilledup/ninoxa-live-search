@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: SK Live Search
+Plugin Name: Ninoxa Live Search
 Plugin URI: 
 Description: A plugin to add live search functionality to your WordPress site.
 Version: 1.0.8
 Author: Mohammad Anbarestany
 Author URI: https://anbarestany.ir
-Text Domain: sk-live-search
+Text Domain: ninoxa-live-search
 Domain Path: /languages
 License: GPL-3.0
 */
@@ -27,13 +27,13 @@ function live_search_enqueue_scripts()
         'nonce' => wp_create_nonce('live_search_nonce'),
         'refresh_nonce_action' => 'live_search_refresh_nonce',
         'i18n' => array(
-            'search_suggestions' => __('Search suggestions', 'sk-live-search'),
-            'one_suggestion' => __('1 suggestion available', 'sk-live-search'),
+            'search_suggestions' => __('Search suggestions', 'ninoxa-live-search'),
+            'one_suggestion' => __('1 suggestion available', 'ninoxa-live-search'),
             // translators: %d is the number of suggestions available.
-            'suggestions_available' => __('%d suggestions available', 'sk-live-search'),
-            'search_unavailable' => __('Search temporarily unavailable. Please try again.', 'sk-live-search'),
-            'nonce_refresh_failed' => __('Search security token refresh failed', 'sk-live-search'),
-            'search_failed' => __('Search request failed', 'sk-live-search')
+            'suggestions_available' => __('%d suggestions available', 'ninoxa-live-search'),
+            'search_unavailable' => __('Search temporarily unavailable. Please try again.', 'ninoxa-live-search'),
+            'nonce_refresh_failed' => __('Search security token refresh failed', 'ninoxa-live-search'),
+            'search_failed' => __('Search request failed', 'ninoxa-live-search')
         )
     ));
 }
@@ -50,7 +50,7 @@ add_action('wp_enqueue_scripts', 'live_search_enqueue_scripts');
  * @param string $search_query The search query to append to the URL
  * @return string The complete search URL with language support
  */
-function sk_live_search_get_multilingual_search_url($search_query) {
+function ninoxa_live_search_get_multilingual_search_url($search_query) {
     $base_url = home_url('/');
     
     // Check for Polylang plugin
@@ -133,14 +133,14 @@ function live_search_ajax()
 
     if (!isset($_POST['nonce'])) {
         wp_send_json_error(array(
-            'message' => __('Missing nonce', 'sk-live-search'),
+            'message' => __('Missing nonce', 'ninoxa-live-search'),
             'code' => 'missing_nonce'
         ));
     }
 
     if (!wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'live_search_nonce')) {
         wp_send_json_error(array(
-            'message' => __('Invalid nonce', 'sk-live-search'),
+            'message' => __('Invalid nonce', 'ninoxa-live-search'),
             'code' => 'invalid_nonce'
         ));
     }
@@ -150,7 +150,7 @@ function live_search_ajax()
     if (empty($search_query) || strlen($search_query) < 3) {
         // Return no results for empty or too short queries
         echo '<div class="live-search-no-results">';
-        echo esc_html__('no results found...', 'sk-live-search');
+        echo esc_html__('no results found...', 'ninoxa-live-search');
         echo '</div>';
         wp_die();
     }
@@ -175,7 +175,7 @@ function live_search_ajax()
             <div class="live-search-result" role="option" tabindex="-1" aria-selected="false" data-result-index="<?php echo esc_attr($result_index); ?>">
                 <?php
                 // translators: 1: result index number, 2: post title.
-                $aria_label = esc_attr(sprintf(__('Search result %1$d: %2$s', 'sk-live-search'), $result_index, get_the_title()));
+                $aria_label = esc_attr(sprintf(__('Search result %1$d: %2$s', 'ninoxa-live-search'), $result_index, get_the_title()));
                 ?>
                 <a href="<?php the_permalink(); ?>" tabindex="-1" aria-label="<?php echo esc_attr($aria_label); ?>">
                     <?php the_title(); ?>
@@ -191,17 +191,17 @@ function live_search_ajax()
             <div class="live-search-more-results" role="option" tabindex="-1" aria-selected="false" data-result-index="<?php echo esc_attr($result_index); ?>">
                 <?php
                 // translators: %s is the search query.
-                $more_aria_label = esc_attr(sprintf(__('View more search results for: %s', 'sk-live-search'), $search_query));
+                $more_aria_label = esc_attr(sprintf(__('View more search results for: %s', 'ninoxa-live-search'), $search_query));
                 ?>
-                <a href="<?php echo esc_url(sk_live_search_get_multilingual_search_url($search_query)); ?>" tabindex="-1" aria-label="<?php echo esc_attr($more_aria_label); ?>">
-                    <?php echo esc_html__('More results...', 'sk-live-search'); ?>
+                <a href="<?php echo esc_url(ninoxa_live_search_get_multilingual_search_url($search_query)); ?>" tabindex="-1" aria-label="<?php echo esc_attr($more_aria_label); ?>">
+                    <?php echo esc_html__('More results...', 'ninoxa-live-search'); ?>
                 </a>
             </div>
 <?php
         }
     } else {
         echo '<div class="live-search-no-results" role="status" aria-live="polite">';
-        echo esc_html__('no results found...', 'sk-live-search');
+        echo esc_html__('no results found...', 'ninoxa-live-search');
         echo '</div>';
     }
     wp_reset_postdata();

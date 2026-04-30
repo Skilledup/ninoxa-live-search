@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Live Search 1.0.3\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/live-search\n"
-"POT-Creation-Date: 2025-02-05T19:45:06+00:00\n"
-"PO-Revision-Date: 2026-04-21 22:52+0330\n"
+"Project-Id-Version: Ninoxa Live Search 1.0.8\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/sk-live-search\n"
+"POT-Creation-Date: 2026-04-30T22:25:48+00:00\n"
+"PO-Revision-Date: 2026-05-01 01:58+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa_IR\n"
@@ -11,78 +11,78 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.4.2\n"
-"X-Domain: sk-live-search\n"
+"X-Domain: ninoxa-live-search\n"
+
+#. Plugin Name of the plugin
+#: ninoxa-live-search.php
+msgid "Ninoxa Live Search"
+msgstr "جستجوی زنده نینوکسا"
 
 #. Description of the plugin
-#: sk-live-search.php
+#: ninoxa-live-search.php
 msgid "A plugin to add live search functionality to your WordPress site."
 msgstr "افزودن امکان جستجو زنده به وردپرس."
 
 #. Author of the plugin
-#: sk-live-search.php
+#: ninoxa-live-search.php
 msgid "Mohammad Anbarestany"
 msgstr "محمد عنبرستانی"
 
-#: sk-live-search.php:150 sk-live-search.php:201
-msgid "no results found..."
-msgstr "نتیجه‌ای یافت نشد..."
+#. Author URI of the plugin
+#: ninoxa-live-search.php
+msgid "https://anbarestany.ir"
+msgstr "https://anbarestany.ir"
 
-#: sk-live-search.php:194
-msgid "More results..."
-msgstr "نتایج بیشتر..."
-
-#: sk-live-search.php:133
-msgid "Missing nonce"
-msgstr "توکن امنیتی موجود نیست"
-
-#: sk-live-search.php:140
-msgid "Invalid nonce"
-msgstr "توکن امنیتی نامعتبر"
-
-#: sk-live-search.php:30
+#: ninoxa-live-search.php:30
 msgid "Search suggestions"
 msgstr "پیشنهادات جستجو"
 
-#: sk-live-search.php:31
+#: ninoxa-live-search.php:31
 msgid "1 suggestion available"
 msgstr "۱ پیشنهاد موجود است"
 
 #. translators: %d is the number of suggestions available.
-#: sk-live-search.php:33
+#: ninoxa-live-search.php:33
 #, php-format
 msgid "%d suggestions available"
 msgstr "%d پیشنهاد موجود است"
 
-#: sk-live-search.php:34
+#: ninoxa-live-search.php:34
 msgid "Search temporarily unavailable. Please try again."
 msgstr "جستجو موقتاً در دسترس نیست. لطفاً دوباره تلاش کنید."
 
-#: sk-live-search.php:35
+#: ninoxa-live-search.php:35
 msgid "Search security token refresh failed"
 msgstr "بروزرسانی توکن امنیتی جستجو ناموفق"
 
-#: sk-live-search.php:36
+#: ninoxa-live-search.php:36
 msgid "Search request failed"
 msgstr "درخواست جستجو ناموفق"
 
-#. Plugin Name of the plugin
-#: sk-live-search.php
-msgid "SK Live Search"
-msgstr "جستجوی زنده SK"
+#: ninoxa-live-search.php:136
+msgid "Missing nonce"
+msgstr "توکن امنیتی موجود نیست"
 
-#. Author URI of the plugin
-#: sk-live-search.php
-msgid "https://anbarestany.ir"
-msgstr "https://anbarestany.ir"
+#: ninoxa-live-search.php:143
+msgid "Invalid nonce"
+msgstr "توکن امنیتی نامعتبر"
+
+#: ninoxa-live-search.php:153 ninoxa-live-search.php:204
+msgid "no results found..."
+msgstr "نتیجه‌ای یافت نشد..."
 
 #. translators: 1: result index number, 2: post title.
-#: sk-live-search.php:175
+#: ninoxa-live-search.php:178
 #, php-format
 msgid "Search result %1$d: %2$s"
 msgstr "نتایج جستجو %1$d: %2$s"
 
 #. translators: %s is the search query.
-#: sk-live-search.php:191
+#: ninoxa-live-search.php:194
 #, php-format
 msgid "View more search results for: %s"
 msgstr "دیدن نتایج بیشتر برای: %s"
+
+#: ninoxa-live-search.php:197
+msgid "More results..."
+msgstr "نتایج بیشتر..."

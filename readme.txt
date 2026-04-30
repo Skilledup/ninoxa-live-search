@@ -1,5 +1,5 @@
-=== SK Live Search ===
-Contributors: Mohammad Anbarestany
+=== Ninoxa Live Search ===
+Contributors: macse2
 Tags: search, live search, ajax search, real-time search
 Requires at least: 5.0
 Tested up to: 6.9
@@ -12,7 +12,7 @@ A plugin to add live search functionality to your WordPress site.
 
 == Description ==
 
-SK Live Search adds an accessible, real-time AJAX-powered live search to your WordPress site. It supports multilingual sites via Polylang and WPML.
+Ninoxa Live Search adds an accessible, real-time AJAX-powered live search to your WordPress site. It supports multilingual sites via Polylang and WPML.
 
 Features:
 * Real-time search results as you type
@@ -23,13 +23,13 @@ Features:
 
 == Installation ==
 
-1. Upload the `sk-live-search` folder to the `/wp-content/plugins/` directory.
+1. Upload the `ninoxa-live-search` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. The live search will be automatically enabled on your site.
 
 == Keyboard Shortcuts ==
 
-* **Ctrl + /**: Focus the SK Live Search input
+* **Ctrl + /**: Focus the Ninoxa Live Search input
 * **Arrow Up/Down**: Navigate through search results
 * **Enter**: Select highlighted result
 * **Escape**: Close search results

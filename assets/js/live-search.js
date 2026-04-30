@@ -205,7 +205,7 @@ jQuery(document).ready(function ($) {
 
         // Process input
         $input.not('.search-input-processed')
-            .addClass('search-input-processed sk-live-search-input')
+            .addClass('search-input-processed ninoxa-live-search-input')
             .attr({
                 'autocomplete': 'off',
                 'role': 'combobox',
@@ -344,14 +344,14 @@ jQuery(document).ready(function ($) {
         }
     });
     
-    // Global keyboard shortcut: Ctrl + / to focus SK Live Search input
+    // Global keyboard shortcut: Ctrl + / to focus Ninoxa Live Search input
     $(document).on('keydown', function(e) {
         // Check for Ctrl + / (forward slash)
         if (e.ctrlKey && e.key === '/') {
             e.preventDefault();
             
-            // Find the first visible SK Live Search input (only inputs processed by this plugin)
-            const $searchInput = $('.sk-live-search-input').filter(function() {
+            // Find the first visible Ninoxa Live Search input (only inputs processed by this plugin)
+            const $searchInput = $('.ninoxa-live-search-input').filter(function() {
                 const $input = $(this);
                 // Check if the input is visible and not disabled
                 return $input.is(':visible') && !$input.prop('disabled') && !$input.prop('readonly');

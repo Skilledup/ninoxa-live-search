@@ -228,7 +228,7 @@ html[dir="rtl"] .live-search-loading {
 /* Enhanced focus styles for keyboard navigation */
 .search-input-wrapper input[type="search"]:focus,
 .search-input-wrapper input[name="s"]:focus,
-.sk-live-search-input:focus {
+.ninoxa-live-search-input:focus {
     outline: 2px solid #0073aa;
     outline-offset: 2px;
     box-shadow: 0 0 0 1px #0073aa;
@@ -238,7 +238,7 @@ html[dir="rtl"] .live-search-loading {
 @media (prefers-contrast: high) {
     .search-input-wrapper input[type="search"]:focus,
     .search-input-wrapper input[name="s"]:focus,
-    .sk-live-search-input:focus {
+    .ninoxa-live-search-input:focus {
         outline: 3px solid;
         box-shadow: 0 0 0 2px;
     }
@@ -285,7 +285,7 @@ html[dir="rtl"] .live-search-loading {
     /* Hide shortcut hint when search input is focused */
     .search-input-wrapper input[type="search"]:focus + ::after,
     .search-input-wrapper input[name="s"]:focus + ::after,
-    .search-input-wrapper .sk-live-search-input:focus + ::after,
+    .search-input-wrapper .ninoxa-live-search-input:focus + ::after,
     .search-input-wrapper:focus-within::after {
         display: none;
     }

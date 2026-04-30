@@ -1,4 +1,4 @@
-# SK Live Search
+# Ninoxa Live Search
 
 AJAX-powered, instant search results for your WordPress search forms. Works out of the box.
 
@@ -15,11 +15,11 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 
 - Use a standard WordPress search form; results appear below the input.
 - Min query: 3 chars. Shows up to 10 results + a "More results..." link.
-- Press **Ctrl + /** anywhere on the page to quickly jump to the SK Live Search input.
+- Press **Ctrl + /** anywhere on the page to quickly jump to the Ninoxa Live Search input.
 
 ## Keyboard Shortcuts
 
-- **Ctrl + /**: Focus the first available SK Live Search input on the page
+- **Ctrl + /**: Focus the first available Ninoxa Live Search input on the page
 - **Arrow Up/Down**: Navigate through search results
 - **Enter**: Select highlighted result
 - **Escape**: Close search results
