@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ninoxa Live Search 1.0.8\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/sk-live-search\n"
-"POT-Creation-Date: 2026-04-30T22:25:48+00:00\n"
-"PO-Revision-Date: 2026-05-01 01:58+0330\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninoxa-live-search\n"
+"POT-Creation-Date: 2025-02-05T19:45:06+00:00\n"
+"PO-Revision-Date: 2026-04-21 22:52+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa_IR\n"
@@ -12,11 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.4.2\n"
 "X-Domain: ninoxa-live-search\n"
-
-#. Plugin Name of the plugin
-#: ninoxa-live-search.php
-msgid "Ninoxa Live Search"
-msgstr "جستجوی زنده نینوکسا"
 
 #. Description of the plugin
 #: ninoxa-live-search.php
@@ -28,10 +23,21 @@ msgstr "افزودن امکان جستجو زنده به وردپرس."
 msgid "Mohammad Anbarestany"
 msgstr "محمد عنبرستانی"
 
-#. Author URI of the plugin
-#: ninoxa-live-search.php
-msgid "https://anbarestany.ir"
-msgstr "https://anbarestany.ir"
+#: ninoxa-live-search.php:150 ninoxa-live-search.php:201
+msgid "no results found..."
+msgstr "نتیجه‌ای یافت نشد..."
+
+#: ninoxa-live-search.php:194
+msgid "More results..."
+msgstr "نتایج بیشتر..."
+
+#: ninoxa-live-search.php:133
+msgid "Missing nonce"
+msgstr "توکن امنیتی موجود نیست"
+
+#: ninoxa-live-search.php:140
+msgid "Invalid nonce"
+msgstr "توکن امنیتی نامعتبر"
 
 #: ninoxa-live-search.php:30
 msgid "Search suggestions"
@@ -59,30 +65,24 @@ msgstr "بروزرسانی توکن امنیتی جستجو ناموفق"
 msgid "Search request failed"
 msgstr "درخواست جستجو ناموفق"
 
-#: ninoxa-live-search.php:136
-msgid "Missing nonce"
-msgstr "توکن امنیتی موجود نیست"
+#. Plugin Name of the plugin
+#: ninoxa-live-search.php
+msgid "Ninoxa Live Search"
+msgstr "جستجوی زنده نینوکسا"
 
-#: ninoxa-live-search.php:143
-msgid "Invalid nonce"
-msgstr "توکن امنیتی نامعتبر"
-
-#: ninoxa-live-search.php:153 ninoxa-live-search.php:204
-msgid "no results found..."
-msgstr "نتیجه‌ای یافت نشد..."
+#. Author URI of the plugin
+#: ninoxa-live-search.php
+msgid "https://anbarestany.ir"
+msgstr "https://anbarestany.ir"
 
 #. translators: 1: result index number, 2: post title.
-#: ninoxa-live-search.php:178
+#: ninoxa-live-search.php:175
 #, php-format
 msgid "Search result %1$d: %2$s"
 msgstr "نتایج جستجو %1$d: %2$s"
 
 #. translators: %s is the search query.
-#: ninoxa-live-search.php:194
+#: ninoxa-live-search.php:191
 #, php-format
 msgid "View more search results for: %s"
 msgstr "دیدن نتایج بیشتر برای: %s"
-
-#: ninoxa-live-search.php:197
-msgid "More results..."
-msgstr "نتایج بیشتر..."
