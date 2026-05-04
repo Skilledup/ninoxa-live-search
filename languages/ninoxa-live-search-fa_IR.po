@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Ninoxa Live Search 1.0.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninoxa-live-search\n"
 "POT-Creation-Date: 2025-02-05T19:45:06+00:00\n"
-"PO-Revision-Date: 2026-04-21 22:52+0330\n"
+"PO-Revision-Date: 2026-05-04 22:18+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fa_IR\n"
@@ -72,8 +72,8 @@ msgstr "جستجوی زنده نینوکسا"
 
 #. Author URI of the plugin
 #: ninoxa-live-search.php
-msgid "https://anbarestany.ir"
-msgstr "https://anbarestany.ir"
+msgid "https://profiles.wordpress.org/macse2/"
+msgstr "https://profiles.wordpress.org/macse2/"
 
 #. translators: 1: result index number, 2: post title.
 #: ninoxa-live-search.php:175

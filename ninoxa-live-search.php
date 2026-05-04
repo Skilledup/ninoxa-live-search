@@ -5,7 +5,7 @@ Plugin URI:
 Description: A plugin to add live search functionality to your WordPress site.
 Version: 1.0.8
 Author: Mohammad Anbarestany
-Author URI: https://anbarestany.ir
+Author URI: https://profiles.wordpress.org/macse2/
 Text Domain: ninoxa-live-search
 Domain Path: /languages
 License: GPL-3.0
