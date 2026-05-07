@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Ninoxa Live Search
-Plugin URI: 
+Plugin URI: https://wordpress.org/plugins/ninoxa-live-search/
 Description: A plugin to add live search functionality to your WordPress site.
 Version: 1.0.8
 Author: Mohammad Anbarestany
