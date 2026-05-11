@@ -157,9 +157,8 @@ class Ninoxa_Live_Search_Settings {
 				</div>
 			</div>
 
-			<?php if ( '' !== $settings_messages ) : ?>
-				<div class="ninoxa-settings__notices"><?php echo $settings_messages; ?></div>
-			<?php endif; ?>
+			<div class="wp-header-end" style="margin-bottom: 20px;"></div>
+			<?php echo $settings_messages; ?>
 
 			<form action="options.php" method="post" class="ninoxa-settings__form">
 				<?php settings_fields( self::OPTION_GROUP ); ?>
