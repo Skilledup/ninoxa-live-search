@@ -26,3 +26,7 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 - **Enter**: Select highlighted result
 - **Escape**: Close search results
 - **Tab**: Close search results and move focus
+
+## Wordpress Directory
+
+[https://wordpress.org/plugins/ninoxa-live-search/](https://wordpress.org/plugins/ninoxa-live-search/)
