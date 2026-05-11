@@ -158,8 +158,7 @@ class Ninoxa_Live_Search_Settings {
 			</div>
 
 			<div class="wp-header-end" style="margin-bottom: 20px;"></div>
-			<?php echo $settings_messages; ?>
-
+		<?php echo wp_kses_post( $settings_messages ); ?>
 			<form action="options.php" method="post" class="ninoxa-settings__form">
 				<?php settings_fields( self::OPTION_GROUP ); ?>
 				<div class="ninoxa-settings__panel">
