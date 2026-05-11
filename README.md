@@ -7,7 +7,7 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 - Real-time results (AJAX)
 - Multilingual: Polylang, WPML, or fallback to default
 - Accessible: ARIA + keyboard navigation
-- Keyboard shortcut: **Ctrl + /** to quickly focus search input
+- Configurable keyboard shortcut with a dedicated settings screen
 - Secure: nonce + sanitized input
 - Translation-ready
 
@@ -15,15 +15,14 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 
 - Use a standard WordPress search form; results appear below the input.
 - Min query: 3 chars. Shows up to 10 results + a "More results..." link.
-- Press **Ctrl + /** anywhere on the page to quickly jump to the Ninoxa Live Search input.
+- Manage plugin options from the **Ninoxa Live Search** admin menu.
+- The default shortcut is **Ctrl + /**, and you can replace it with your own key combination or disable it completely.
 
 ## Keyboard Shortcuts
 
-- **Ctrl + /**: Focus the first available Ninoxa Live Search input on the page
+- **Ctrl + /** by default: Focus the first available Ninoxa Live Search input on the page
+- Shortcut value is configurable from the **Ninoxa Live Search** admin menu
 - **Arrow Up/Down**: Navigate through search results
 - **Enter**: Select highlighted result
 - **Escape**: Close search results
 - **Tab**: Close search results and move focus
-
-
-

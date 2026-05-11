@@ -3,10 +3,105 @@ jQuery(document).ready(function ($) {
     let activeSearchInput = null;
     let selectedResultIndex = -1;
     const MAX_RETRY_ATTEMPTS = 2;
+    const shortcutDefinition = parseShortcut(
+        liveSearchData.settings && liveSearchData.settings.keyboardShortcut ?
+            liveSearchData.settings.keyboardShortcut :
+            ''
+    );
+    const shortcutLabel = liveSearchData.settings && liveSearchData.settings.keyboardShortcutLabel ?
+        liveSearchData.settings.keyboardShortcutLabel :
+        '';
 
     // Generate unique IDs for ARIA relationships
     function generateUniqueId(prefix) {
         return prefix + '-' + Math.random().toString(36).substr(2, 9);
+    }
+
+    function normalizeShortcutKey(key) {
+        const normalizedKey = String(key || '').toLowerCase();
+        const aliases = {
+            esc: 'escape',
+            return: 'enter',
+            spacebar: 'space',
+            ' ': 'space',
+            slash: '/',
+            up: 'arrowup',
+            down: 'arrowdown',
+            left: 'arrowleft',
+            right: 'arrowright'
+        };
+
+        return aliases[normalizedKey] || normalizedKey;
+    }
+
+    function parseShortcut(shortcutValue) {
+        const normalizedValue = String(shortcutValue || '').trim().toLowerCase();
+        const modifierAliases = {
+            control: 'ctrl',
+            ctrl: 'ctrl',
+            alt: 'alt',
+            option: 'alt',
+            shift: 'shift',
+            cmd: 'meta',
+            command: 'meta',
+            meta: 'meta'
+        };
+
+        if (!normalizedValue) {
+            return null;
+        }
+
+        return normalizedValue
+            .split('+')
+            .map(function (part) {
+                return part.trim();
+            })
+            .filter(Boolean)
+            .reduce(function (definition, part) {
+                if (!definition) {
+                    return null;
+                }
+
+                if (modifierAliases[part]) {
+                    definition[modifierAliases[part]] = true;
+                    return definition;
+                }
+
+                if (definition.key) {
+                    return null;
+                }
+
+                definition.key = normalizeShortcutKey(part);
+
+                return definition;
+            }, {
+                ctrl: false,
+                alt: false,
+                shift: false,
+                meta: false,
+                key: ''
+            });
+    }
+
+    function shortcutMatchesEvent(event, definition) {
+        if (!definition || !definition.key) {
+            return false;
+        }
+
+        return Boolean(definition.ctrl) === Boolean(event.ctrlKey) &&
+            Boolean(definition.alt) === Boolean(event.altKey) &&
+            Boolean(definition.shift) === Boolean(event.shiftKey) &&
+            Boolean(definition.meta) === Boolean(event.metaKey) &&
+            normalizeShortcutKey(event.key) === definition.key;
+    }
+
+    function applyShortcutHint($wrapper) {
+        if (!shortcutLabel) {
+            $wrapper.removeAttr('data-ninoxa-shortcut');
+            return;
+        }
+
+        $wrapper.attr('data-ninoxa-shortcut', shortcutLabel);
     }
 
     // Refresh nonce via AJAX (used when a search fails due to stale/cached nonce)
@@ -217,6 +312,8 @@ jQuery(document).ready(function ($) {
                 if (!$(this).parent().hasClass('search-input-wrapper')) {
                     $(this).wrap('<div class="search-input-wrapper"></div>');
                 }
+
+                applyShortcutHint($(this).parent('.search-input-wrapper'));
             })
             .on('input', function () {
                 clearTimeout(searchTimer);
@@ -344,32 +441,30 @@ jQuery(document).ready(function ($) {
         }
     });
     
-    // Global keyboard shortcut: Ctrl + / to focus Ninoxa Live Search input
+    // Global keyboard shortcut: configurable from plugin settings.
     $(document).on('keydown', function(e) {
-        // Check for Ctrl + / (forward slash)
-        if (e.ctrlKey && e.key === '/') {
-            e.preventDefault();
-            
-            // Find the first visible Ninoxa Live Search input (only inputs processed by this plugin)
-            const $searchInput = $('.ninoxa-live-search-input').filter(function() {
-                const $input = $(this);
-                // Check if the input is visible and not disabled
-                return $input.is(':visible') && !$input.prop('disabled') && !$input.prop('readonly');
-            }).first();
-            
-            // Focus the search input if found
-            if ($searchInput.length > 0) {
-                $searchInput.focus();
-                
-                // Scroll the input into view if needed
-                $searchInput[0].scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
-                });
-                
-                // Optional: Select all text in the input for easier replacement
-                $searchInput.select();
-            }
+        if (!shortcutMatchesEvent(e, shortcutDefinition)) {
+            return;
+        }
+
+        e.preventDefault();
+
+        // Find the first visible Ninoxa Live Search input (only inputs processed by this plugin)
+        const $searchInput = $('.ninoxa-live-search-input').filter(function() {
+            const $input = $(this);
+
+            return $input.is(':visible') && !$input.prop('disabled') && !$input.prop('readonly');
+        }).first();
+
+        if ($searchInput.length > 0) {
+            $searchInput.focus();
+
+            $searchInput[0].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+
+            $searchInput.select();
         }
     });
     

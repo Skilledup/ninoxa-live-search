@@ -255,7 +255,13 @@ html[dir="rtl"] .live-search-loading {
 
 /* Shortcut hint styling (only visible on Non-mobile devices) */
 @media (min-width: 575px) {
-    .search-input-wrapper::after {
+    .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) input[type="search"],
+    .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) input[name="s"],
+    .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) .ninoxa-live-search-input {
+        padding-right: 5.5rem;
+    }
+
+    .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""])::after {
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -267,25 +273,32 @@ html[dir="rtl"] .live-search-loading {
         padding-right: 0.4rem;
         padding-left: 0.4rem;
         font-size: .75rem;
-        color: #61788e;
-        background-color: #f5f7fa;
-        content: "Ctrl + /";
+        color: #445363;
+        background-color: #f1f4f7;
+        content: attr(data-ninoxa-shortcut);
         border: 1px solid #dee3e9;
-        border-radius: 6px;
+        border-radius: 0;
         direction: LTR !important;
     }
 
     /* RTL support using attribute selector for better browser compatibility */
-    [dir="rtl"] .search-input-wrapper::after,
-    html[dir="rtl"] .search-input-wrapper::after {
+    [dir="rtl"] .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""])::after,
+    html[dir="rtl"] .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""])::after {
         right: auto;
         left: 0.75rem;
     }
+
+    [dir="rtl"] .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) input[type="search"],
+    [dir="rtl"] .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) input[name="s"],
+    [dir="rtl"] .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) .ninoxa-live-search-input,
+    html[dir="rtl"] .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) input[type="search"],
+    html[dir="rtl"] .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) input[name="s"],
+    html[dir="rtl"] .search-input-wrapper[data-ninoxa-shortcut]:not([data-ninoxa-shortcut=""]) .ninoxa-live-search-input {
+        padding-right: 0.75rem;
+        padding-left: 5.5rem;
+    }
     
     /* Hide shortcut hint when search input is focused */
-    .search-input-wrapper input[type="search"]:focus + ::after,
-    .search-input-wrapper input[name="s"]:focus + ::after,
-    .search-input-wrapper .ninoxa-live-search-input:focus + ::after,
     .search-input-wrapper:focus-within::after {
         display: none;
     }
