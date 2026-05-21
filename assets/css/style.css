@@ -88,7 +88,7 @@ form.search {
     border: 2px solid #f3f3f3;
     border-top: 2px solid #3498db;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: ninoxa-live-search-spin 1s linear infinite;
     display: none;
     z-index: 100;
 }
@@ -99,7 +99,7 @@ html[dir="rtl"] .live-search-loading {
     right: auto;
 }
 
-@keyframes spin {
+@keyframes ninoxa-live-search-spin {
     0% { transform: translateY(-50%) rotate(0deg); }
     100% { transform: translateY(-50%) rotate(360deg); }
 }
