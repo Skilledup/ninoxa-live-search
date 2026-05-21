@@ -12,6 +12,12 @@ jQuery(document).ready(function ($) {
         liveSearchData.settings.keyboardShortcutLabel :
         '';
 
+    // Loading indicator settings
+    const loadingSettings = liveSearchData.settings || {};
+    const spinnerEnabled  = loadingSettings.loadingSpinnerEnabled  !== false;
+    const spinnerPosition = loadingSettings.loadingSpinnerPosition || 'right';
+    const sweepEnabled    = loadingSettings.loadingSweepEnabled    !== false;
+
     // Generate unique IDs for ARIA relationships
     function generateUniqueId(prefix) {
         return prefix + '-' + Math.random().toString(36).substr(2, 9);
@@ -313,7 +319,9 @@ jQuery(document).ready(function ($) {
                     $(this).wrap('<div class="search-input-wrapper"></div>');
                 }
 
-                applyShortcutHint($(this).parent('.search-input-wrapper'));
+                const $wrapper = $(this).parent('.search-input-wrapper');
+                $wrapper.attr('data-ninoxa-spinner-position', spinnerPosition);
+                applyShortcutHint($wrapper);
             })
             .on('input', function () {
                 clearTimeout(searchTimer);
@@ -326,14 +334,15 @@ jQuery(document).ready(function ($) {
                 activeSearchInput = $input;
                 selectedResultIndex = -1;
 
-                // Add loading indicator if not exists
-                if (!$wrapper.find('.live-search-loading').length) {
+                // Add loading indicator if not exists (only when spinner is enabled)
+                if (spinnerEnabled && !$wrapper.find('.live-search-loading').length) {
                     $wrapper.append('<div class="live-search-loading" aria-hidden="true"></div>');
                 }
 
                 if (searchQuery.length < 3) {
                     closeResults($input, $results);
                     $wrapper.find('.live-search-loading').hide();
+                    $wrapper.removeClass('ninoxa-live-search-sweeping');
                     return;
                 }
 
@@ -341,7 +350,12 @@ jQuery(document).ready(function ($) {
                 const $loadingIndicator = $wrapper.find('.live-search-loading');
 
                 searchTimer = setTimeout(function () {
-                    $loadingIndicator.show();
+                    if (spinnerEnabled) {
+                        $loadingIndicator.show();
+                    }
+                    if (sweepEnabled) {
+                        $wrapper.addClass('ninoxa-live-search-sweeping');
+                    }
 
                     performLiveSearch(searchQuery, $input, $results, $loadingIndicator)
                         .then(function(response) {
@@ -377,6 +391,7 @@ jQuery(document).ready(function ($) {
                         })
                         .finally(function() {
                             $loadingIndicator.hide();
+                            $wrapper.removeClass('ninoxa-live-search-sweeping');
                         });
                 }, 500);
             })

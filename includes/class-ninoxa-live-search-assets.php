@@ -39,6 +39,23 @@ class Ninoxa_Live_Search_Assets {
 			NINOXA_LIVE_SEARCH_VERSION
 		);
 
+		// Output CSS custom properties for spinner color/size so JS does not need to
+		// touch inline styles and themes cannot override the scoped variables.
+		$size_map = array(
+			'small'  => '14px',
+			'medium' => '16px',
+			'large'  => '20px',
+		);
+		$spinner_color    = sanitize_hex_color( Ninoxa_Live_Search_Options::get( 'loading_spinner_color' ) );
+		$spinner_color    = $spinner_color ? $spinner_color : '#3498db';
+		$spinner_size_key = Ninoxa_Live_Search_Options::get( 'loading_spinner_size' );
+		$spinner_size     = isset( $size_map[ $spinner_size_key ] ) ? $size_map[ $spinner_size_key ] : '16px';
+
+		wp_add_inline_style(
+			'live-search-style',
+			':root{--ninoxa-spinner-color:' . $spinner_color . ';--ninoxa-spinner-size:' . $spinner_size . ';}'
+		);
+
 		wp_localize_script(
 			'live-search',
 			'liveSearchData',
@@ -47,8 +64,11 @@ class Ninoxa_Live_Search_Assets {
 				'nonce'                => wp_create_nonce( 'live_search_nonce' ),
 				'refresh_nonce_action' => 'live_search_refresh_nonce',
 				'settings'             => array(
-					'keyboardShortcut'      => Ninoxa_Live_Search_Options::get_keyboard_shortcut(),
-					'keyboardShortcutLabel' => Ninoxa_Live_Search_Options::get_keyboard_shortcut_label(),
+					'keyboardShortcut'       => Ninoxa_Live_Search_Options::get_keyboard_shortcut(),
+					'keyboardShortcutLabel'  => Ninoxa_Live_Search_Options::get_keyboard_shortcut_label(),
+					'loadingSpinnerEnabled'  => '0' !== Ninoxa_Live_Search_Options::get( 'loading_spinner_enabled' ),
+					'loadingSpinnerPosition' => Ninoxa_Live_Search_Options::get( 'loading_spinner_position' ) ?: 'right',
+					'loadingSweepEnabled'    => '0' !== Ninoxa_Live_Search_Options::get( 'loading_sweep_enabled' ),
 				),
 				'i18n'                 => array(
 					'search_suggestions'    => __( 'Search suggestions', 'ninoxa-live-search' ),

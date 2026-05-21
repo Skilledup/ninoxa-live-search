@@ -221,4 +221,7 @@ jQuery(function ($) {
 
 	setShortcutValue($input.val());
 	setStatus(ninoxaLiveSearchSettings.capturePrompt, 'idle');
+
+	// Initialise wp-color-picker on all colour inputs in this settings page.
+	$('.ninoxa-settings__input--color').wpColorPicker();
 });

@@ -83,10 +83,10 @@ form.search {
     right: 12px;
     top: 50%;
     transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
+    width: var(--ninoxa-spinner-size, 16px);
+    height: var(--ninoxa-spinner-size, 16px);
     border: 2px solid #f3f3f3;
-    border-top: 2px solid #3498db;
+    border-top: 2px solid var(--ninoxa-spinner-color, #3498db);
     border-radius: 50%;
     animation: ninoxa-live-search-spin 1s linear infinite;
     display: none;
@@ -99,9 +99,79 @@ html[dir="rtl"] .live-search-loading {
     right: auto;
 }
 
+/* Position override via data attribute set by JS from settings */
+.search-input-wrapper[data-ninoxa-spinner-position="left"] .live-search-loading {
+    left: 12px;
+    right: auto;
+}
+
+.search-input-wrapper[data-ninoxa-spinner-position="right"] .live-search-loading {
+    right: 12px;
+    left: auto;
+}
+
+/* RTL always mirrors the configured position */
+[dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="right"] .live-search-loading,
+html[dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="right"] .live-search-loading {
+    left: 12px;
+    right: auto;
+}
+
+[dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="left"] .live-search-loading,
+html[dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="left"] .live-search-loading {
+    right: 12px;
+    left: auto;
+}
+
 @keyframes ninoxa-live-search-spin {
     0% { transform: translateY(-50%) rotate(0deg); }
     100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Light sweep animation on the search input wrapper */
+.search-input-wrapper.ninoxa-live-search-sweeping {
+    overflow: hidden;
+}
+
+.search-input-wrapper.ninoxa-live-search-sweeping::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.55) 50%,
+        transparent 100%
+    );
+    animation: ninoxa-live-search-sweep 1.4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+[dir="rtl"] .search-input-wrapper.ninoxa-live-search-sweeping::before,
+html[dir="rtl"] .search-input-wrapper.ninoxa-live-search-sweeping::before {
+    left: auto;
+    right: -60%;
+    background: linear-gradient(
+        270deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.55) 50%,
+        transparent 100%
+    );
+    animation: ninoxa-live-search-sweep-rtl 1.4s ease-in-out infinite;
+}
+
+@keyframes ninoxa-live-search-sweep {
+    0%   { left: -60%; }
+    100% { left: 110%; }
+}
+
+@keyframes ninoxa-live-search-sweep-rtl {
+    0%   { right: -60%; }
+    100% { right: 110%; }
 }
 
 .live-search-more-results {
@@ -220,8 +290,13 @@ html[dir="rtl"] .live-search-loading {
     
     .live-search-loading {
         animation: none;
-        border: 2px solid #3498db;
+        border: 2px solid var(--ninoxa-spinner-color, #3498db);
         border-radius: 50%;
+    }
+
+    .search-input-wrapper.ninoxa-live-search-sweeping::before {
+        animation: none;
+        display: none;
     }
 }
 

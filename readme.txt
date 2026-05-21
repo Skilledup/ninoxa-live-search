@@ -2,9 +2,9 @@
 Contributors: macse2
 Tags: search, live search, ajax search, real-time search
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -50,6 +50,10 @@ Features:
 Yes. It supports both Polylang and WPML.
 
 == Changelog ==
+
+= 1.1.1 =
+* Shimmer/light sweep loading animation.
+* Searching/loading settings
 
 = 1.1.0 =
 * Admin menu and settings for Keyboard shortcut customization.
