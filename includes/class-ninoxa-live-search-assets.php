@@ -50,10 +50,17 @@ class Ninoxa_Live_Search_Assets {
 		$spinner_color    = $spinner_color ? $spinner_color : '#3498db';
 		$spinner_size_key = Ninoxa_Live_Search_Options::get( 'loading_spinner_size' );
 		$spinner_size     = isset( $size_map[ $spinner_size_key ] ) ? $size_map[ $spinner_size_key ] : '16px';
+		$spinner_offset   = absint( Ninoxa_Live_Search_Options::get( 'loading_spinner_offset' ) );
+		$spinner_offset   = $spinner_offset ? $spinner_offset : 12;
+		$sweep_speed      = Ninoxa_Live_Search_Options::get( 'loading_sweep_speed' );
+		$allowed_speeds   = array( '0.8s', '1.4s', '2.0s' );
+		if ( ! in_array( $sweep_speed, $allowed_speeds, true ) ) {
+			$sweep_speed = '1.4s';
+		}
 
 		wp_add_inline_style(
 			'live-search-style',
-			':root{--ninoxa-spinner-color:' . $spinner_color . ';--ninoxa-spinner-size:' . $spinner_size . ';}'
+			':root{--ninoxa-spinner-color:' . $spinner_color . ';--ninoxa-spinner-size:' . $spinner_size . ';--ninoxa-spinner-offset:' . $spinner_offset . 'px;--ninoxa-sweep-duration:' . $sweep_speed . ';}'
 		);
 
 		wp_localize_script(

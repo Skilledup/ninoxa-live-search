@@ -393,6 +393,22 @@ class Ninoxa_Live_Search_Settings {
 	}
 
 	/**
+	 * Sanitize the spinner offset.
+	 *
+	 * @param mixed $value Raw field value.
+	 * @return string
+	 */
+	public function sanitize_spinner_offset( $value ) {
+		$offset = absint( $value );
+
+		if ( 0 === $offset ) {
+			return '12';
+		}
+
+		return (string) $offset;
+	}
+
+	/**
 	 * Return the settings sections schema.
 	 *
 	 * @return array<string, array<string, string>>
@@ -461,11 +477,32 @@ class Ninoxa_Live_Search_Settings {
 					'large'  => __( 'Large (20 px)', 'ninoxa-live-search' ),
 				),
 			),
+			'loading_spinner_offset'  => array(
+				'section'     => 'loading',
+				'label'       => __( 'Spinner offset', 'ninoxa-live-search' ),
+				'type'        => 'text',
+				'placeholder' => __( '12', 'ninoxa-live-search' ),
+				'input_class' => 'regular-text ninoxa-settings__input',
+				'description' => __( 'Distance from the left or right edge of the input in pixels.', 'ninoxa-live-search' ),
+				'sanitize_callback' => array( $this, 'sanitize_spinner_offset' ),
+			),
 			'loading_sweep_enabled'   => array(
 				'section'        => 'loading',
 				'label'          => __( 'Light sweep', 'ninoxa-live-search' ),
 				'type'           => 'checkbox',
 				'checkbox_label' => __( 'Animate a light sweep across the search field while loading', 'ninoxa-live-search' ),
+			),
+			'loading_sweep_speed'     => array(
+				'section'  => 'loading',
+				'label'    => __( 'Light sweep speed', 'ninoxa-live-search' ),
+				'type'     => 'select',
+				'default'  => '1.4s',
+				'options'  => array(
+					'0.8s' => __( 'Fast', 'ninoxa-live-search' ),
+					'1.4s' => __( 'Normal', 'ninoxa-live-search' ),
+					'2.0s' => __( 'Slow', 'ninoxa-live-search' ),
+				),
+				'description' => __( 'Set how quickly the light sweep animation travels across the input.', 'ninoxa-live-search' ),
 			),
 		);
 	}

@@ -52,8 +52,8 @@ Yes. It supports both Polylang and WPML.
 == Changelog ==
 
 = 1.1.1 =
-* Shimmer/light sweep loading animation.
-* Searching/loading settings
+* Light sweep loading animation.
+* Loading indicators settings
 
 = 1.1.0 =
 * Admin menu and settings for Keyboard shortcut customization.

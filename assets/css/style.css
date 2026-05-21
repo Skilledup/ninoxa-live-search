@@ -80,47 +80,45 @@ form.search {
 
 .live-search-loading {
     position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: var(--ninoxa-spinner-size, 16px);
-    height: var(--ninoxa-spinner-size, 16px);
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid var(--ninoxa-spinner-color, #3498db);
-    border-radius: 50%;
-    animation: ninoxa-live-search-spin 1s linear infinite;
-    display: none;
-    z-index: 100;
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--ninoxa-spinner-size, 16px);
+	height: var(--ninoxa-spinner-size, 16px);
+	border: 2px solid #f3f3f3;
+	border-top: 2px solid var(--ninoxa-spinner-color, #3498db);
+	border-radius: 50%;
+	animation: ninoxa-live-search-spin 1s linear infinite;
+	display: none;
+	z-index: 100;
 }
 
-[dir="rtl"] .live-search-loading,
-html[dir="rtl"] .live-search-loading {
-    left: 12px;
-    right: auto;
+/* Default position when JS does not set the wrapper attribute */
+.live-search-loading {
+	right: var(--ninoxa-spinner-offset, 12px);
+	left: auto;
 }
 
 /* Position override via data attribute set by JS from settings */
 .search-input-wrapper[data-ninoxa-spinner-position="left"] .live-search-loading {
-    left: 12px;
-    right: auto;
+	left: var(--ninoxa-spinner-offset, 12px);
+	right: auto;
 }
 
 .search-input-wrapper[data-ninoxa-spinner-position="right"] .live-search-loading {
-    right: 12px;
-    left: auto;
+	right: var(--ninoxa-spinner-offset, 12px);
+	left: auto;
 }
 
 /* RTL always mirrors the configured position */
 [dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="right"] .live-search-loading,
 html[dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="right"] .live-search-loading {
-    left: 12px;
-    right: auto;
+	left: var(--ninoxa-spinner-offset, 12px);
+	right: auto;
 }
 
 [dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="left"] .live-search-loading,
 html[dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="left"] .live-search-loading {
-    right: 12px;
-    left: auto;
+	right: var(--ninoxa-spinner-offset, 12px);
 }
 
 @keyframes ninoxa-live-search-spin {
@@ -146,7 +144,7 @@ html[dir="rtl"] .search-input-wrapper[data-ninoxa-spinner-position="left"] .live
         rgba(255, 255, 255, 0.55) 50%,
         transparent 100%
     );
-    animation: ninoxa-live-search-sweep 1.4s ease-in-out infinite;
+    animation: ninoxa-live-search-sweep var(--ninoxa-sweep-duration, 1.4s) ease-in-out infinite;
     pointer-events: none;
     z-index: 2;
 }
@@ -161,7 +159,7 @@ html[dir="rtl"] .search-input-wrapper.ninoxa-live-search-sweeping::before {
         rgba(255, 255, 255, 0.55) 50%,
         transparent 100%
     );
-    animation: ninoxa-live-search-sweep-rtl 1.4s ease-in-out infinite;
+    animation: ninoxa-live-search-sweep-rtl var(--ninoxa-sweep-duration, 1.4s) ease-in-out infinite;
 }
 
 @keyframes ninoxa-live-search-sweep {
