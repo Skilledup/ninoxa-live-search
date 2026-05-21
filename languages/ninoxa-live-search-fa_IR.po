@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Ninoxa Live Search 1.0.8\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninoxa-live-search\n"
-"POT-Creation-Date: 2025-02-05T19:45:06+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninoxa-live-"
+"search\n"
+"POT-Creation-Date: 2026-05-21T21:22:50+00:00\n"
 "PO-Revision-Date: 2026-05-11 22:10+0330\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -12,6 +13,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.8\n"
 "X-Domain: ninoxa-live-search\n"
+
+#. Plugin Name of the plugin
+#: ninoxa-live-search.php includes/class-ninoxa-live-search-settings.php:48
+#: includes/class-ninoxa-live-search-settings.php:155
+msgid "Ninoxa Live Search"
+msgstr "جستجوی زنده نینوکسا"
+
+#. Plugin URI of the plugin
+#: ninoxa-live-search.php
+msgid "https://wordpress.org/plugins/ninoxa-live-search/"
+msgstr "https://wordpress.org/plugins/ninoxa-live-search/"
 
 #. Description of the plugin
 #: ninoxa-live-search.php
@@ -23,14 +35,36 @@ msgstr "افزودن امکان جستجو زنده به وردپرس."
 msgid "Mohammad Anbarestany"
 msgstr "محمد عنبرستانی"
 
-#: includes/class-ninoxa-live-search-search.php:134
-#: includes/class-ninoxa-live-search-search.php:191
-msgid "no results found..."
-msgstr "نتیجه‌ای یافت نشد..."
+#. Author URI of the plugin
+#: ninoxa-live-search.php
+msgid "https://profiles.wordpress.org/macse2/"
+msgstr "https://profiles.wordpress.org/macse2/"
 
-#: includes/class-ninoxa-live-search-search.php:184
-msgid "More results..."
-msgstr "نتایج بیشتر..."
+#: includes/class-ninoxa-live-search-assets.php:81
+msgid "Search suggestions"
+msgstr "پیشنهادات جستجو"
+
+#: includes/class-ninoxa-live-search-assets.php:82
+msgid "1 suggestion available"
+msgstr "۱ پیشنهاد موجود است"
+
+#. translators: %d is the number of suggestions available.
+#: includes/class-ninoxa-live-search-assets.php:84
+#, php-format
+msgid "%d suggestions available"
+msgstr "%d پیشنهاد موجود است"
+
+#: includes/class-ninoxa-live-search-assets.php:85
+msgid "Search temporarily unavailable. Please try again."
+msgstr "جستجو موقتاً در دسترس نیست. لطفاً دوباره تلاش کنید."
+
+#: includes/class-ninoxa-live-search-assets.php:86
+msgid "Search security token refresh failed"
+msgstr "بروزرسانی توکن امنیتی جستجو ناموفق"
+
+#: includes/class-ninoxa-live-search-assets.php:87
+msgid "Search request failed"
+msgstr "درخواست جستجو ناموفق"
 
 #: includes/class-ninoxa-live-search-search.php:111
 msgid "Missing nonce"
@@ -40,42 +74,10 @@ msgstr "توکن امنیتی موجود نیست"
 msgid "Invalid nonce"
 msgstr "توکن امنیتی نامعتبر"
 
-#: includes/class-ninoxa-live-search-assets.php:54
-msgid "Search suggestions"
-msgstr "پیشنهادات جستجو"
-
-#: includes/class-ninoxa-live-search-assets.php:55
-msgid "1 suggestion available"
-msgstr "۱ پیشنهاد موجود است"
-
-#. translators: %d is the number of suggestions available.
-#: includes/class-ninoxa-live-search-assets.php:57
-#, php-format
-msgid "%d suggestions available"
-msgstr "%d پیشنهاد موجود است"
-
-#: includes/class-ninoxa-live-search-assets.php:58
-msgid "Search temporarily unavailable. Please try again."
-msgstr "جستجو موقتاً در دسترس نیست. لطفاً دوباره تلاش کنید."
-
-#: includes/class-ninoxa-live-search-assets.php:59
-msgid "Search security token refresh failed"
-msgstr "بروزرسانی توکن امنیتی جستجو ناموفق"
-
-#: includes/class-ninoxa-live-search-assets.php:60
-msgid "Search request failed"
-msgstr "درخواست جستجو ناموفق"
-
-#. Plugin Name of the plugin
-#: ninoxa-live-search.php includes/class-ninoxa-live-search-settings.php:48
-#: includes/class-ninoxa-live-search-settings.php:153
-msgid "Ninoxa Live Search"
-msgstr "جستجوی زنده نینوکسا"
-
-#. Author URI of the plugin
-#: ninoxa-live-search.php
-msgid "https://profiles.wordpress.org/macse2/"
-msgstr "https://profiles.wordpress.org/macse2/"
+#: includes/class-ninoxa-live-search-search.php:134
+#: includes/class-ninoxa-live-search-search.php:191
+msgid "no results found..."
+msgstr "نتیجه‌ای یافت نشد..."
 
 #. translators: 1: result index number, 2: post title.
 #: includes/class-ninoxa-live-search-search.php:161
@@ -89,47 +91,50 @@ msgstr "نتایج جستجو %1$d: %2$s"
 msgid "View more search results for: %s"
 msgstr "دیدن نتایج بیشتر برای: %s"
 
-#. Plugin URI of the plugin
-#: ninoxa-live-search.php
-msgid "https://wordpress.org/plugins/ninoxa-live-search/"
-msgstr "https://wordpress.org/plugins/ninoxa-live-search/"
+#: includes/class-ninoxa-live-search-search.php:184
+msgid "More results..."
+msgstr "نتایج بیشتر..."
 
 #: includes/class-ninoxa-live-search-settings.php:49
 msgid "Ninoxa"
 msgstr "نینوکسا"
 
-#: includes/class-ninoxa-live-search-settings.php:124
-#: includes/class-ninoxa-live-search-settings.php:255
-#: includes/class-ninoxa-live-search-settings.php:260
+#: includes/class-ninoxa-live-search-settings.php:126
+#: includes/class-ninoxa-live-search-settings.php:302
+#: includes/class-ninoxa-live-search-settings.php:307
 msgid "Disabled"
 msgstr "غیرفعال"
 
-#: includes/class-ninoxa-live-search-settings.php:125
+#: includes/class-ninoxa-live-search-settings.php:127
 msgid "Focus the field and press the shortcut you want to use."
 msgstr "روی فیلد کلیک کنید و ترکیب کلید های مورد نظرتان رو فشار دهید."
 
-#: includes/class-ninoxa-live-search-settings.php:126
+#: includes/class-ninoxa-live-search-settings.php:128
 msgid "Listening for your shortcut."
 msgstr "در انتظار فشردن کلید ها."
 
-#: includes/class-ninoxa-live-search-settings.php:127
+#: includes/class-ninoxa-live-search-settings.php:129
 msgid "Shortcut captured. Save settings to apply it."
 msgstr "میان‌ بر دریافت شد. لطفاً تنظیمات را ذخیره کنید."
 
-#: includes/class-ninoxa-live-search-settings.php:128
+#: includes/class-ninoxa-live-search-settings.php:130
 msgid "Shortcut cleared. Save settings to keep it disabled."
 msgstr "میان بر حذف شد. تنظیمات را ذخیره کنید تا میان بر غیرفعال شود."
 
-#: includes/class-ninoxa-live-search-settings.php:129
+#: includes/class-ninoxa-live-search-settings.php:131
 msgid "Add one key besides Ctrl, Alt, Shift, or Cmd."
 msgstr "بجز کنترل، شیفت، آلت یا کامند کلید دیگری را نیز فشار دهید."
 
-#: includes/class-ninoxa-live-search-settings.php:130
-#: includes/class-ninoxa-live-search-settings.php:316
-msgid "Keyboard shortcut must contain one key and optional modifiers like Ctrl, Alt, Shift, or Cmd."
-msgstr "میان‌بر صفحه کلید باید شامل یک کلید و تغییردهنده‌های اختیاری مانند Ctrl، Alt، Shift یا Cmd باشد."
+#: includes/class-ninoxa-live-search-settings.php:132
+#: includes/class-ninoxa-live-search-settings.php:386
+msgid ""
+"Keyboard shortcut must contain one key and optional modifiers like Ctrl, "
+"Alt, Shift, or Cmd."
+msgstr ""
+"میان‌بر صفحه کلید باید شامل یک کلید و تغییردهنده‌های اختیاری مانند Ctrl، Alt، "
+"Shift یا Cmd باشد."
 
-#: includes/class-ninoxa-live-search-settings.php:156
+#: includes/class-ninoxa-live-search-settings.php:158
 msgid "AJAX-powered instant search results for your WordPress site."
 msgstr "نتایج جستجوی فوری‌ای که توسط AJAX برای سایت وردپرس شما ارائه می‌شود."
 
@@ -142,29 +147,144 @@ msgid "Clear"
 msgstr "حذف"
 
 #: includes/class-ninoxa-live-search-settings.php:233
-msgid "Focus the field and press the shortcut you want to use. Backspace or Delete clears it."
-msgstr "روی فیلد کلیک کنید و میان‌بری که می‌خواهید استفاده کنید را فشار دهید. کلید Backspace یا Delete آن را حذف می‌کند."
+msgid ""
+"Focus the field and press the shortcut you want to use. Backspace or Delete "
+"clears it."
+msgstr ""
+"روی فیلد کلیک کنید و میان‌بری که می‌خواهید استفاده کنید را فشار دهید. کلید "
+"Backspace یا Delete آن را حذف می‌کند."
 
-#: includes/class-ninoxa-live-search-settings.php:259
+#: includes/class-ninoxa-live-search-settings.php:244
+msgid "Enable"
+msgstr "فعال"
+
+#: includes/class-ninoxa-live-search-settings.php:306
 msgid "Shown on search field"
 msgstr "نمایش شده در فیلد جستجو"
 
-#: includes/class-ninoxa-live-search-settings.php:333
+#: includes/class-ninoxa-live-search-settings.php:419
 msgid "General"
 msgstr "عمومی"
 
-#: includes/class-ninoxa-live-search-settings.php:334
+#: includes/class-ninoxa-live-search-settings.php:420
 msgid "Choose how visitors trigger and use live search."
 msgstr "نحوه فعال‌سازی و استفاده از جستجوی زنده توسط بازدیدکنندگان را انتخاب کنید."
 
-#: includes/class-ninoxa-live-search-settings.php:348
+#: includes/class-ninoxa-live-search-settings.php:423
+msgid "Loading indicators"
+msgstr "نمایشگرهای بارگذاری"
+
+#: includes/class-ninoxa-live-search-settings.php:424
+msgid ""
+"Configure the visual feedback shown on the search field while results are "
+"loading."
+msgstr "بازخورد بصری نمایش داده‌شده روی فیلد جستجو را هنگام بارگذاری نتایج پیکربندی کنید."
+
+#: includes/class-ninoxa-live-search-settings.php:438
 msgid "Keyboard shortcut"
 msgstr "میان‌بر صفحه کلید"
 
-#: includes/class-ninoxa-live-search-settings.php:350
+#: includes/class-ninoxa-live-search-settings.php:440
 msgid "Press keys"
 msgstr "کلیدها را فشار دهید"
 
-#: includes/class-ninoxa-live-search-settings.php:352
-msgid "Allowed keys: letters (A–Z), digits (0–9), symbols (/ . , ; - = [ ] ' `), function keys (F1–F12), and named keys — Enter, Escape, Backspace, Delete, Tab, Space, Insert, Home, End, Page Up, Page Down, and arrows. Combine with Ctrl, Alt, Shift, or Cmd. Leave empty to disable the shortcut and its hint."
-msgstr "کلیدهای مجاز: حروف (A–Z)، اعداد (0–9)، نمادها (/ . , ; - = [ ] ' `)، کلیدهای تابع (F1–F12)، و کلیدهای نام‌گذاری شده — Enter، Escape، Backspace، Delete، Tab، Space، Insert، Home، End، Page Up، Page Down، و کلیدهای جهتی. آن‌ها را با Ctrl، Alt، Shift یا Cmd ترکیب کنید. برای غیرفعال کردن میان‌بر و نکته آن، آن را خالی بگذارید."
+#: includes/class-ninoxa-live-search-settings.php:442
+msgid ""
+"Allowed keys: letters (A–Z), digits (0–9), symbols (/ . , ; - = [ ] ' `), "
+"function keys (F1–F12), and named keys — Enter, Escape, Backspace, Delete, "
+"Tab, Space, Insert, Home, End, Page Up, Page Down, and arrows. Combine with "
+"Ctrl, Alt, Shift, or Cmd. Leave empty to disable the shortcut and its hint."
+msgstr ""
+"کلیدهای مجاز: حروف (A–Z)، اعداد (0–9)، نمادها (/ . , ; - = [ ] ' `)، کلیدهای "
+"تابع (F1–F12)، و کلیدهای نام‌گذاری شده — Enter، Escape، Backspace، Delete، "
+"Tab، Space، Insert، Home، End، Page Up، Page Down، و کلیدهای جهتی. آن‌ها را "
+"با Ctrl، Alt، Shift یا Cmd ترکیب کنید. برای غیرفعال کردن میان‌بر و نکته آن، "
+"آن را خالی بگذارید."
+
+#: includes/class-ninoxa-live-search-settings.php:447
+msgid "Spinner"
+msgstr "نشانگر چرخشی"
+
+#: includes/class-ninoxa-live-search-settings.php:449
+msgid "Show a spinning indicator inside the search field while loading"
+msgstr "نمایش یک نشانگر چرخشی داخل فیلد جستجو هنگام بارگذاری"
+
+#: includes/class-ninoxa-live-search-settings.php:453
+msgid "Spinner position"
+msgstr "موقعیت نشانگر چرخشی"
+
+#: includes/class-ninoxa-live-search-settings.php:457
+msgid "Right"
+msgstr "راست"
+
+#: includes/class-ninoxa-live-search-settings.php:458
+msgid "Left"
+msgstr "چپ"
+
+#: includes/class-ninoxa-live-search-settings.php:460
+msgid "Side of the search field where the spinner appears."
+msgstr "سمت فیلد جستجو که نشانگر در آن ظاهر می‌شود."
+
+#: includes/class-ninoxa-live-search-settings.php:464
+msgid "Spinner color"
+msgstr "رنگ نشانگر چرخشی"
+
+#: includes/class-ninoxa-live-search-settings.php:467
+msgid "Color of the spinning indicator arc."
+msgstr "رنگ قوس نشانگر چرخشی"
+
+#: includes/class-ninoxa-live-search-settings.php:471
+msgid "Spinner size"
+msgstr "اندازه نشانگر چرخشی"
+
+#: includes/class-ninoxa-live-search-settings.php:475
+msgid "Small (14 px)"
+msgstr "کوچک (۱۴ پیکسل)"
+
+#: includes/class-ninoxa-live-search-settings.php:476
+msgid "Medium (16 px)"
+msgstr "متوسط (۱۶ پیکسل)"
+
+#: includes/class-ninoxa-live-search-settings.php:477
+msgid "Large (20 px)"
+msgstr "بزرگ (۲۰ پیکسل)"
+
+#: includes/class-ninoxa-live-search-settings.php:482
+msgid "Spinner offset"
+msgstr "فاصله نشانگر چرخشی"
+
+#: includes/class-ninoxa-live-search-settings.php:484
+msgid "12"
+msgstr "۱۲"
+
+#: includes/class-ninoxa-live-search-settings.php:486
+msgid "Distance from the left or right edge of the input in pixels."
+msgstr "فاصله از لبهٔ چپ یا راست ورودی به پیکسل."
+
+#: includes/class-ninoxa-live-search-settings.php:491
+msgid "Light sweep"
+msgstr "پوشش نور"
+
+#: includes/class-ninoxa-live-search-settings.php:493
+msgid "Animate a light sweep across the search field while loading"
+msgstr "نمایش یک پوشش نورانی روی فیلد جستجو هنگام بارگذاری"
+
+#: includes/class-ninoxa-live-search-settings.php:497
+msgid "Light sweep speed"
+msgstr "سرعت پوشش نور"
+
+#: includes/class-ninoxa-live-search-settings.php:501
+msgid "Fast"
+msgstr "سریع"
+
+#: includes/class-ninoxa-live-search-settings.php:502
+msgid "Normal"
+msgstr "معمولی"
+
+#: includes/class-ninoxa-live-search-settings.php:503
+msgid "Slow"
+msgstr "کند"
+
+#: includes/class-ninoxa-live-search-settings.php:505
+msgid "Set how quickly the light sweep animation travels across the input."
+msgstr "سرعت حرکت انیمیشن پوشش نور روی ورودی را تنظیم کنید."
