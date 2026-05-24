@@ -136,7 +136,7 @@
 }
 
 .ninoxa-settings__input {
-	width: min(100%, 420px);
+	width: min(100%, 400px);
 	min-height: 46px;
 	padding: 10px 14px;
 	border: 1px solid var(--ninoxa-settings-border);
