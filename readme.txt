@@ -49,6 +49,10 @@ Features:
 
 Yes. It supports both Polylang and WPML.
 
+= Does this plugin support both Classic and Block themes? =
+
+Yes. It works out of the box with standard WordPress search forms across all themes.
+
 == Changelog ==
 
 = 1.1.1 =
