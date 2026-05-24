@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'NINOXA_LIVE_SEARCH_VERSION' ) ) {
-	define( 'NINOXA_LIVE_SEARCH_VERSION', '1.1.0' );
+	define( 'NINOXA_LIVE_SEARCH_VERSION', '1.1.1' );
 }
 
 if ( ! defined( 'NINOXA_LIVE_SEARCH_PATH' ) ) {

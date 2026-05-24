@@ -527,6 +527,6 @@ class Ninoxa_Live_Search_Settings {
 	 * @return string
 	 */
 	private function get_plugin_version() {
-		return defined( 'NINOXA_LIVE_SEARCH_VERSION' ) ? NINOXA_LIVE_SEARCH_VERSION : '1.1.0';
+		return defined( 'NINOXA_LIVE_SEARCH_VERSION' ) ? NINOXA_LIVE_SEARCH_VERSION : '1.1.1';
 	}
 }
