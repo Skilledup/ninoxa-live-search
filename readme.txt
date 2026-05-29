@@ -15,7 +15,7 @@ A plugin to add live search functionality to your WordPress site.
 Ninoxa Live Search adds an accessible, real-time AJAX-powered live search to your WordPress site. It supports multilingual sites via Polylang and WPML.
 
 * Use a standard WordPress search form; results appear below the input.
-* Min query: 3 chars. Shows up to 10 results + a "More results..." link.
+* Min query: 3 chars. Shows configurable number of results (defaults to 10) + a "More results..." link.
 * Manage plugin options from the **Ninoxa Live Search** admin menu.
 * The default shortcut is **Ctrl + /**, and you can replace it with your own key combination or disable it completely.
 
@@ -61,7 +61,8 @@ Yes. It works out of the box with standard WordPress search forms across all the
 * CSS toggle switches for spinner and light sweep options.
 * Collapsible sections for loading indicator sub-settings.
 * Sticky sidebar with contextual tips on the settings page.
-* About tab with plugin info and system environment details.
+* About tab with plugin info.
+* Configurable number of results setting.
 
 = 1.1.1 =
 * Light sweep loading animation

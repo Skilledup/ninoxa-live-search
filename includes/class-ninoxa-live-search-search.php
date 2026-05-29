@@ -137,23 +137,28 @@ class Ninoxa_Live_Search_Search {
 			wp_die();
 		}
 
+		$results_limit = (int) Ninoxa_Live_Search_Options::get( 'search_results_limit' );
+		if ( $results_limit <= 0 ) {
+			$results_limit = 10;
+		}
+
 		$query = new WP_Query(
 			array(
 				's'                      => $search_query,
 				'post_status'            => 'publish',
-				'posts_per_page'         => 11,
+				'posts_per_page'         => $results_limit + 1,
 				'no_found_rows'          => true,
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
 			)
 		);
 
-		$has_more_results = $query->post_count > 10;
+		$has_more_results = $query->post_count > $results_limit;
 
 		if ( $query->have_posts() ) {
 			$result_index = 0;
 
-			while ( $query->have_posts() && $result_index < 10 ) {
+			while ( $query->have_posts() && $result_index < $results_limit ) {
 				$query->the_post();
 				++$result_index;
 				$aria_label = sprintf(

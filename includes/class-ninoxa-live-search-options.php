@@ -21,6 +21,7 @@ class Ninoxa_Live_Search_Options {
 	public static function get_defaults() {
 		return array(
 			'keyboard_shortcut'        => 'ctrl+/',
+			'search_results_limit'     => '10',
 			'loading_spinner_enabled'  => '1',
 			'loading_spinner_position' => 'right',
 			'loading_spinner_color'    => '#3498db',

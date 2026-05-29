@@ -213,6 +213,19 @@ class Ninoxa_Live_Search_Settings {
 				<?php $this->render_shortcut_field( $options ); ?>
 			</div>
 		</div>
+
+		<div class="ninoxa-settings-card">
+			<div class="settings-card-header">
+				<span class="settings-card-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+				</span>
+				<h3><?php esc_html_e( 'Search Results', 'ninoxa-live-search' ); ?></h3>
+			</div>
+			<div class="settings-card-body">
+				<p class="settings-card-intro"><?php esc_html_e( 'Control the number of instant search results shown to visitors.', 'ninoxa-live-search' ); ?></p>
+				<?php $this->render_field_card( 'search_results_limit', $options ); ?>
+			</div>
+		</div>
 		<?php
 	}
 
@@ -626,6 +639,22 @@ class Ninoxa_Live_Search_Settings {
 	}
 
 	/**
+	 * Sanitize the search results limit.
+	 *
+	 * @param mixed $value Raw field value.
+	 * @return string
+	 */
+	public function sanitize_search_results_limit( $value ) {
+		$limit = absint( $value );
+
+		if ( 0 === $limit ) {
+			return '10';
+		}
+
+		return (string) $limit;
+	}
+
+	/**
 	 * Return the settings sections schema.
 	 *
 	 * @return array<string, array<string, string>>
@@ -658,6 +687,15 @@ class Ninoxa_Live_Search_Settings {
 				'input_class'       => 'regular-text code ninoxa-settings__input',
 				'description'       => __( 'Allowed keys: letters (A–Z), digits (0–9), symbols (/ . , ; - = [ ] \' `), function keys (F1–F12), and named keys — Enter, Escape, Backspace, Delete, Tab, Space, Insert, Home, End, Page Up, Page Down, and arrows. Combine with Ctrl, Alt, Shift, or Cmd. Leave empty to disable the shortcut and its hint.', 'ninoxa-live-search' ),
 				'sanitize_callback' => array( $this, 'sanitize_keyboard_shortcut' ),
+			),
+			'search_results_limit'    => array(
+				'section'           => 'general',
+				'label'             => __( 'Search results limit', 'ninoxa-live-search' ),
+				'type'              => 'text',
+				'placeholder'       => __( '10', 'ninoxa-live-search' ),
+				'input_class'       => 'regular-text ninoxa-settings__input',
+				'description'       => __( 'Number of search results to display before showing the "More results..." link.', 'ninoxa-live-search' ),
+				'sanitize_callback' => array( $this, 'sanitize_search_results_limit' ),
 			),
 			'loading_spinner_enabled' => array(
 				'section'        => 'loading',

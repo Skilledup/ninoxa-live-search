@@ -14,7 +14,7 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 ## Usage
 
 - Use a standard WordPress search form; results appear below the input.
-- Min query: 3 chars. Shows up to 10 results + a "More results..." link.
+- Min query: 3 chars. Shows configurable number of results (defaults to 10) + a "More results..." link.
 - Manage plugin options from the **Ninoxa Live Search** admin menu.
 - The default shortcut is **Ctrl + /**, and you can replace it with your own key combination or disable it completely.
 
