@@ -224,4 +224,81 @@ jQuery(function ($) {
 
 	// Initialise wp-color-picker on all colour inputs in this settings page.
 	$('.ninoxa-settings__input--color').wpColorPicker();
+
+	// -------------------------------------------------------------------------
+	// Tab navigation (hash-based)
+	// -------------------------------------------------------------------------
+	function initTabs() {
+		var validTabs = ['general', 'loading', 'about'];
+
+		function activateTab(tabId) {
+			if (validTabs.indexOf(tabId) === -1) { tabId = 'general'; }
+
+			$('.ninoxa-settings-tabs .nav-tab').each(function () {
+				var isActive = $(this).data('ninoxa-tab') === tabId;
+				$(this).toggleClass('nav-tab-active', isActive);
+				if (isActive) {
+					$(this).attr('aria-current', 'page');
+				} else {
+					$(this).removeAttr('aria-current');
+				}
+			});
+
+			$('.ninoxa-tab-pane').each(function () {
+				$(this).toggleClass('is-active', $(this).data('tab') === tabId);
+			});
+
+			$('.ninoxa-submit-row').toggle(tabId !== 'about');
+
+			$('.ninoxa-settings-sidebar .sidebar-tip').each(function () {
+				$(this).toggle($(this).data('sidebar-tab') === tabId);
+			});
+		}
+
+		function getActiveTab() {
+			var hash = window.location.hash.replace('#', '');
+			return hash || 'general';
+		}
+
+		activateTab(getActiveTab());
+
+		$('.ninoxa-settings-tabs .nav-tab').on('click', function (e) {
+			e.preventDefault();
+			var tabId = $(this).data('ninoxa-tab');
+			window.location.hash = '#' + tabId;
+			activateTab(tabId);
+		});
+
+		$(window).on('hashchange', function () { activateTab(getActiveTab()); });
+	}
+
+	// -------------------------------------------------------------------------
+	// Collapsible sections — set initial state from checkbox on page load
+	// -------------------------------------------------------------------------
+	function initCollapsibleSections() {
+		$('[data-controls]').each(function () {
+			var targetId = $(this).data('controls');
+			var $target = $('#' + targetId);
+			if ($target.length) {
+				$target.toggleClass('is-expanded', $(this).prop('checked'));
+			}
+		});
+	}
+
+	// -------------------------------------------------------------------------
+	// Toggle controls — expand / collapse on checkbox change
+	// -------------------------------------------------------------------------
+	function initToggleControls() {
+		$(document).on('change', '[data-controls]', function () {
+			var targetId = $(this).data('controls');
+			var $target = $('#' + targetId);
+			if ($target.length) {
+				$target.toggleClass('is-expanded', $(this).prop('checked'));
+			}
+		});
+	}
+
+	initTabs();
+	initCollapsibleSections();
+	initToggleControls();
 });

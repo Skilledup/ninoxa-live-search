@@ -4,7 +4,7 @@ Tags: search, live search, ajax search, real-time search
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -55,6 +55,14 @@ Yes. It works out of the box with standard WordPress search forms across all the
 
 == Changelog ==
 
+= 1.2.0 =
+* Redesigned settings UI with card-based layout and dark blue color palette.
+* Three-tab settings navigation: General, Loading, and About.
+* CSS toggle switches for spinner and light sweep options.
+* Collapsible sections for loading indicator sub-settings.
+* Sticky sidebar with contextual tips on the settings page.
+* About tab with plugin info and system environment details.
+
 = 1.1.1 =
 * Light sweep loading animation
 * Loading indicators settings
@@ -74,5 +82,5 @@ Yes. It works out of the box with standard WordPress search forms across all the
 
 == Upgrade Notice ==
 
-= 1.1.0 =
-Improved functionalities. Update recommended.
+= 1.2.0 =
+Redesigned settings UI. Update recommended.

@@ -56,7 +56,8 @@ class Ninoxa_Live_Search_Settings {
 	}
 
 	/**
-	 * Register plugin settings.
+	 * Register plugin settings with WordPress (nonce + sanitize callback only).
+	 * Fields are rendered manually — no add_settings_section/field needed.
 	 *
 	 * @return void
 	 */
@@ -66,29 +67,6 @@ class Ninoxa_Live_Search_Settings {
 			Ninoxa_Live_Search_Options::OPTION_NAME,
 			array( $this, 'sanitize_settings' )
 		);
-
-		foreach ( $this->get_sections() as $section_id => $section ) {
-			add_settings_section(
-				$section_id,
-				$section['title'],
-				array( $this, 'render_section' ),
-				self::PAGE_SLUG
-			);
-		}
-
-		foreach ( $this->get_fields() as $field_id => $field ) {
-			add_settings_field(
-				$field_id,
-				$field['label'],
-				array( $this, 'render_field' ),
-				self::PAGE_SLUG,
-				$field['section'],
-				array(
-					'field_id' => $field_id,
-					'field'    => $field,
-				)
-			);
-		}
 	}
 
 	/**
@@ -149,170 +127,409 @@ class Ninoxa_Live_Search_Settings {
 		$settings_messages = trim( ob_get_clean() );
 		?>
 		<div class="wrap ninoxa-settings">
-			<div class="ninoxa-settings__header">
-				<div>
-					<h1>
-						<?php echo esc_html__( 'Ninoxa Live Search', 'ninoxa-live-search' ); ?>
-						<span class="ninoxa-settings__version"><?php echo esc_html( NINOXA_LIVE_SEARCH_VERSION ); ?></span>
-					</h1>
-					<p class="ninoxa-settings__intro"><?php echo esc_html__( 'AJAX-powered instant search results for your WordPress site.', 'ninoxa-live-search' ); ?></p>
-				</div>
+
+			<div class="ninoxa-settings-header">
+				<h1>
+					<?php esc_html_e( 'Ninoxa Live Search', 'ninoxa-live-search' ); ?>
+					<span class="ninoxa-settings-version"><?php echo esc_html( $this->get_plugin_version() ); ?></span>
+				</h1>
+				<p class="ninoxa-settings-intro"><?php esc_html_e( 'AJAX-powered instant search results for your WordPress site.', 'ninoxa-live-search' ); ?></p>
 			</div>
 
 			<div class="wp-header-end" style="margin-bottom: 20px;"></div>
-		<?php echo wp_kses_post( $settings_messages ); ?>
-			<form action="options.php" method="post" class="ninoxa-settings__form">
-				<?php settings_fields( self::OPTION_GROUP ); ?>
-				<div class="ninoxa-settings__panel">
-					<?php do_settings_sections( self::PAGE_SLUG ); ?>
+
+			<?php if ( $settings_messages ) : ?>
+			<div class="ninoxa-settings-notices"><?php echo wp_kses_post( $settings_messages ); ?></div>
+			<?php endif; ?>
+
+			<nav class="ninoxa-settings-tabs" aria-label="<?php esc_attr_e( 'Settings tabs', 'ninoxa-live-search' ); ?>">
+				<a href="#general" class="nav-tab nav-tab-active" data-ninoxa-tab="general">
+					<span class="ninoxa-tab-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"/></svg>
+					</span>
+					<?php esc_html_e( 'General', 'ninoxa-live-search' ); ?>
+				</a>
+				<a href="#loading" class="nav-tab" data-ninoxa-tab="loading">
+					<span class="ninoxa-tab-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+					</span>
+					<?php esc_html_e( 'Loading', 'ninoxa-live-search' ); ?>
+				</a>
+				<a href="#about" class="nav-tab" data-ninoxa-tab="about">
+					<span class="ninoxa-tab-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+					</span>
+					<?php esc_html_e( 'About', 'ninoxa-live-search' ); ?>
+				</a>
+			</nav>
+
+			<div class="ninoxa-settings-layout">
+				<div class="ninoxa-settings-main">
+					<form action="options.php" method="post" class="ninoxa-settings-form">
+						<?php settings_fields( self::OPTION_GROUP ); ?>
+
+						<div class="ninoxa-tab-pane is-active" id="ninoxa-tab-general" data-tab="general">
+							<?php $this->render_tab_general(); ?>
+						</div>
+
+						<div class="ninoxa-tab-pane" id="ninoxa-tab-loading" data-tab="loading">
+							<?php $this->render_tab_loading(); ?>
+						</div>
+
+						<div class="ninoxa-tab-pane" id="ninoxa-tab-about" data-tab="about">
+							<?php $this->render_tab_about(); ?>
+						</div>
+
+						<div class="ninoxa-submit-row">
+							<?php submit_button( __( 'Save settings', 'ninoxa-live-search' ), 'primary ninoxa-submit-btn', 'submit', false ); ?>
+						</div>
+					</form>
 				</div>
-				<?php submit_button( __( 'Save settings', 'ninoxa-live-search' ), 'primary ninoxa-settings__submit' ); ?>
-			</form>
+
+				<?php $this->render_sidebar(); ?>
+			</div>
+
 		</div>
 		<?php
 	}
 
 	/**
-	 * Render section copy.
+	 * Render the General tab content.
 	 *
-	 * @param array<string, string> $section Current section.
 	 * @return void
 	 */
-	public function render_section( $section ) {
-		$sections = $this->get_sections();
-
-		if ( empty( $sections[ $section['id'] ]['description'] ) ) {
-			return;
-		}
-
-		echo '<p class="ninoxa-settings__section-description">' . esc_html( $sections[ $section['id'] ]['description'] ) . '</p>';
+	private function render_tab_general() {
+		$options = Ninoxa_Live_Search_Options::get_all();
+		?>
+		<div class="ninoxa-settings-card">
+			<div class="settings-card-header">
+				<span class="settings-card-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M8 12h.001M12 12h.001M16 12h.001M7 16h10"/></svg>
+				</span>
+				<h3><?php esc_html_e( 'Keyboard Shortcut', 'ninoxa-live-search' ); ?></h3>
+			</div>
+			<div class="settings-card-body">
+				<p class="settings-card-intro"><?php esc_html_e( 'Choose how visitors trigger live search from the keyboard.', 'ninoxa-live-search' ); ?></p>
+				<?php $this->render_shortcut_field( $options ); ?>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**
-	 * Render an individual field.
+	 * Render the Loading tab content.
 	 *
-	 * @param array<string, mixed> $args Field arguments.
 	 * @return void
 	 */
-	public function render_field( $args ) {
-		$field_id = $args['field_id'];
-		$field    = $args['field'];
-		$options  = Ninoxa_Live_Search_Options::get_all();
+	private function render_tab_loading() {
+		$options         = Ninoxa_Live_Search_Options::get_all();
+		$spinner_enabled = isset( $options['loading_spinner_enabled'] ) && '1' === (string) $options['loading_spinner_enabled'];
+		$sweep_enabled   = isset( $options['loading_sweep_enabled'] ) && '1' === (string) $options['loading_sweep_enabled'];
+		?>
+		<div class="ninoxa-settings-card ninoxa-settings-card-highlight">
+			<div class="settings-card-header">
+				<span class="settings-card-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+				</span>
+				<h3><?php esc_html_e( 'Loading Spinner', 'ninoxa-live-search' ); ?></h3>
+			</div>
+			<div class="settings-card-body">
+				<p class="settings-card-intro"><?php esc_html_e( 'Show a spinning indicator inside the search field while results load.', 'ninoxa-live-search' ); ?></p>
+
+				<div class="settings-field">
+					<div class="settings-field-header">
+						<label for="ninoxa-live-search-loading-spinner-enabled"><?php esc_html_e( 'Enable spinner', 'ninoxa-live-search' ); ?></label>
+						<?php $this->render_toggle( 'loading_spinner_enabled', $options, 'ninoxa-spinner-options' ); ?>
+					</div>
+				</div>
+
+				<div class="ninoxa-settings-collapsible<?php echo $spinner_enabled ? ' is-expanded' : ''; ?>" id="ninoxa-spinner-options">
+					<div class="ninoxa-settings-collapsible__inner">
+						<?php
+						$this->render_field_card( 'loading_spinner_position', $options );
+						$this->render_field_card( 'loading_spinner_color', $options );
+						$this->render_field_card( 'loading_spinner_size', $options );
+						$this->render_field_card( 'loading_spinner_offset', $options );
+						?>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="ninoxa-settings-card">
+			<div class="settings-card-header">
+				<span class="settings-card-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>
+				</span>
+				<h3><?php esc_html_e( 'Light Sweep', 'ninoxa-live-search' ); ?></h3>
+			</div>
+			<div class="settings-card-body">
+				<p class="settings-card-intro"><?php esc_html_e( 'Animate a light sweep across the search field while results load.', 'ninoxa-live-search' ); ?></p>
+
+				<div class="settings-field">
+					<div class="settings-field-header">
+						<label for="ninoxa-live-search-loading-sweep-enabled"><?php esc_html_e( 'Enable light sweep', 'ninoxa-live-search' ); ?></label>
+						<?php $this->render_toggle( 'loading_sweep_enabled', $options, 'ninoxa-sweep-options' ); ?>
+					</div>
+				</div>
+
+				<div class="ninoxa-settings-collapsible<?php echo $sweep_enabled ? ' is-expanded' : ''; ?>" id="ninoxa-sweep-options">
+					<div class="ninoxa-settings-collapsible__inner">
+						<?php $this->render_field_card( 'loading_sweep_speed', $options ); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render the About tab content.
+	 *
+	 * @return void
+	 */
+	private function render_tab_about() {
+		?>
+		<div class="ninoxa-settings-card">
+			<div class="settings-card-body">
+				<p><?php esc_html_e( 'Ninoxa Live Search adds real-time, AJAX-powered search results to any standard WordPress search form. Results appear instantly as the visitor types — no page reload needed.', 'ninoxa-live-search' ); ?></p>
+				<p><?php esc_html_e( 'Compatible with Polylang and WPML for multilingual sites. Fully accessible with keyboard navigation and ARIA attributes. Lightweight with no external dependencies.', 'ninoxa-live-search' ); ?></p>
+				<p>
+					<a href="https://wordpress.org/plugins/ninoxa-live-search/" target="_blank" rel="noopener noreferrer" class="ninoxa-about-link ninoxa-about-link--primary">
+						<?php esc_html_e( 'View on WordPress.org', 'ninoxa-live-search' ); ?>
+						<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+					</a>
+				</p>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render the sticky sidebar with contextual tips.
+	 *
+	 * @return void
+	 */
+	private function render_sidebar() {
+		?>
+		<aside class="ninoxa-settings-sidebar">
+
+			<div class="sidebar-tip" data-sidebar-tab="general">
+				<div class="tip-header">
+					<span class="tip-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+					</span>
+					<strong><?php esc_html_e( 'Keyboard Shortcut', 'ninoxa-live-search' ); ?></strong>
+				</div>
+				<p><?php esc_html_e( 'A shortcut hint badge appears inside the search field to guide visitors. Leave the shortcut empty to hide it entirely.', 'ninoxa-live-search' ); ?></p>
+			</div>
+
+			<div class="sidebar-tip" data-sidebar-tab="general">
+				<div class="tip-header">
+					<span class="tip-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+					</span>
+					<strong><?php esc_html_e( 'Examples', 'ninoxa-live-search' ); ?></strong>
+				</div>
+				<p><?php esc_html_e( 'Popular shortcuts: Ctrl+K for command-palette style, Ctrl+/ for search, or just / for quick access.', 'ninoxa-live-search' ); ?></p>
+			</div>
+
+			<div class="sidebar-tip" data-sidebar-tab="loading">
+				<div class="tip-header">
+					<span class="tip-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+					</span>
+					<strong><?php esc_html_e( 'Loading Indicators', 'ninoxa-live-search' ); ?></strong>
+				</div>
+				<p><?php esc_html_e( 'Spinner and light sweep can both be active at the same time for a richer loading experience.', 'ninoxa-live-search' ); ?></p>
+			</div>
+
+			<div class="sidebar-tip" data-sidebar-tab="loading">
+				<div class="tip-header">
+					<span class="tip-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+					</span>
+					<strong><?php esc_html_e( 'Performance', 'ninoxa-live-search' ); ?></strong>
+				</div>
+				<p><?php esc_html_e( 'Both indicators are pure CSS animations — zero JavaScript overhead, no impact on search speed.', 'ninoxa-live-search' ); ?></p>
+			</div>
+
+			<div class="sidebar-tip" data-sidebar-tab="about">
+				<div class="tip-header">
+					<span class="tip-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+					</span>
+					<strong><?php esc_html_e( 'Leave a Review', 'ninoxa-live-search' ); ?></strong>
+				</div>
+				<p><?php esc_html_e( 'Enjoying the plugin? A review on WordPress.org helps others discover it and motivates continued development.', 'ninoxa-live-search' ); ?></p>
+			</div>
+
+		</aside>
+		<?php
+	}
+
+	/**
+	 * Render a Shuriken-style CSS toggle switch for a checkbox field.
+	 *
+	 * @param string               $field_id    Field ID.
+	 * @param array<string, mixed> $options     Current saved options.
+	 * @param string               $controls_id ID of the collapsible section this toggle controls.
+	 * @return void
+	 */
+	private function render_toggle( $field_id, $options, $controls_id = '' ) {
+		$value         = isset( $options[ $field_id ] ) ? (string) $options[ $field_id ] : '0';
+		$input_id      = 'ninoxa-live-search-' . str_replace( '_', '-', $field_id );
+		$data_controls = $controls_id ? ' data-controls="' . esc_attr( $controls_id ) . '"' : '';
+
+		printf(
+			'<label class="ninoxa-toggle"><input id="%1$s" name="%2$s[%3$s]" type="checkbox" value="1"%4$s class="ninoxa-settings__input--checkbox"%5$s /><span class="toggle-slider"></span></label>',
+			esc_attr( $input_id ),
+			esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
+			esc_attr( $field_id ),
+			checked( $value, '1', false ),
+			$data_controls
+		);
+	}
+
+	/**
+	 * Render a settings field inside a .settings-field card block.
+	 *
+	 * @param string               $field_id Field ID.
+	 * @param array<string, mixed> $options  Current saved options.
+	 * @return void
+	 */
+	private function render_field_card( $field_id, $options ) {
+		$fields = $this->get_fields();
+
+		if ( ! isset( $fields[ $field_id ] ) ) {
+			return;
+		}
+
+		$field    = $fields[ $field_id ];
 		$value    = isset( $options[ $field_id ] ) ? (string) $options[ $field_id ] : '';
 		$input_id = 'ninoxa-live-search-' . str_replace( '_', '-', $field_id );
+		?>
+		<div class="settings-field">
+			<div class="settings-field-header">
+				<label for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+			</div>
+			<div class="settings-input-group">
+				<?php
+				switch ( $field['type'] ) {
+					case 'select':
+						$options_html = '';
+						if ( isset( $field['options'] ) && is_array( $field['options'] ) ) {
+							foreach ( $field['options'] as $opt_val => $opt_label ) {
+								$options_html .= sprintf(
+									'<option value="%s"%s>%s</option>',
+									esc_attr( $opt_val ),
+									selected( $value, $opt_val, false ),
+									esc_html( $opt_label )
+								);
+							}
+						}
+						printf(
+							'<select id="%1$s" name="%2$s[%3$s]" class="ninoxa-settings__select">%4$s</select>',
+							esc_attr( $input_id ),
+							esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
+							esc_attr( $field_id ),
+							wp_kses( $options_html, array( 'option' => array( 'value' => true, 'selected' => true ) ) )
+						);
+						break;
+
+					case 'color':
+						$default_color = isset( $field['default'] ) ? $field['default'] : '#000000';
+						printf(
+							'<input id="%1$s" name="%2$s[%3$s]" type="text" value="%4$s" class="ninoxa-settings__input ninoxa-settings__input--color" data-default-color="%5$s" />',
+							esc_attr( $input_id ),
+							esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
+							esc_attr( $field_id ),
+							esc_attr( $value ? $value : $default_color ),
+							esc_attr( $default_color )
+						);
+						break;
+
+					case 'text':
+					default:
+						printf(
+							'<input id="%1$s" name="%2$s[%3$s]" type="text" value="%4$s" class="%5$s" placeholder="%6$s" autocomplete="off" spellcheck="false" />',
+							esc_attr( $input_id ),
+							esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
+							esc_attr( $field_id ),
+							esc_attr( $value ),
+							esc_attr( isset( $field['input_class'] ) ? $field['input_class'] : 'regular-text ninoxa-settings__input' ),
+							esc_attr( isset( $field['placeholder'] ) ? $field['placeholder'] : '' )
+						);
+						break;
+				}
+				?>
+			</div>
+			<?php if ( ! empty( $field['description'] ) ) : ?>
+			<p class="settings-field-description"><?php echo esc_html( $field['description'] ); ?></p>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render the keyboard shortcut capture field.
+	 *
+	 * @param array<string, mixed> $options Current saved options.
+	 * @return void
+	 */
+	private function render_shortcut_field( $options ) {
+		$fields    = $this->get_fields();
+		$field_id  = 'keyboard_shortcut';
+		$field     = $fields[ $field_id ];
+		$value     = isset( $options[ $field_id ] ) ? (string) $options[ $field_id ] : '';
+		$input_id  = 'ninoxa-live-search-keyboard-shortcut';
 		$status_id = $input_id . '-status';
 
-		echo '<div class="ninoxa-settings__field">';
-
-		if ( 'keyboard_shortcut' === $field_id ) {
-			$display_value = Ninoxa_Live_Search_Options::get_keyboard_shortcut_label( $value );
-
-			if ( '' === $display_value && '' !== $value ) {
-				$display_value = $value;
-			}
-
-			echo '<div class="ninoxa-settings__shortcut-control">';
-			printf(
-				'<input id="%1$s" name="%2$s[%3$s]" type="text" value="%4$s" class="%5$s ninoxa-settings__input--shortcut" placeholder="%6$s" autocomplete="off" spellcheck="false" readonly="readonly" inputmode="none" aria-describedby="%7$s" data-ninoxa-shortcut-input />',
-				esc_attr( $input_id ),
-				esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
-				esc_attr( $field_id ),
-				esc_attr( $display_value ),
-				esc_attr( $field['input_class'] ),
-				esc_attr( $field['placeholder'] ),
-				esc_attr( $status_id )
-			);
-			printf(
-				'<button type="button" class="button button-secondary ninoxa-settings__shortcut-clear" data-ninoxa-shortcut-clear>%s</button>',
-				esc_html__( 'Clear', 'ninoxa-live-search' )
-			);
-			echo '</div>';
-			printf(
-				'<p id="%1$s" class="ninoxa-settings__capture-hint" data-ninoxa-shortcut-status>%2$s</p>',
-				esc_attr( $status_id ),
-				esc_html__( 'Focus the field and press the shortcut you want to use. Backspace or Delete clears it.', 'ninoxa-live-search' )
-			);
-		} else {
-			switch ( $field['type'] ) {
-				case 'checkbox':
-					printf(
-						'<label class="ninoxa-settings__toggle"><input id="%1$s" name="%2$s[%3$s]" type="checkbox" value="1"%4$s class="ninoxa-settings__input--checkbox" /> <span>%5$s</span></label>',
-						esc_attr( $input_id ),
-						esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
-						esc_attr( $field_id ),
-						checked( $value, '1', false ),
-						esc_html( isset( $field['checkbox_label'] ) ? $field['checkbox_label'] : __( 'Enable', 'ninoxa-live-search' ) )
-					);
-					break;
-
-				case 'select':
-					$options_html = '';
-					if ( isset( $field['options'] ) && is_array( $field['options'] ) ) {
-						foreach ( $field['options'] as $option_value => $option_label ) {
-							$options_html .= sprintf(
-								'<option value="%s"%s>%s</option>',
-								esc_attr( $option_value ),
-								selected( $value, $option_value, false ),
-								esc_html( $option_label )
-							);
-						}
-					}
-					printf(
-						'<select id="%1$s" name="%2$s[%3$s]" class="ninoxa-settings__select">%4$s</select>',
-						esc_attr( $input_id ),
-						esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
-						esc_attr( $field_id ),
-						wp_kses(
-							$options_html,
-							array( 'option' => array( 'value' => array(), 'selected' => array() ) )
-						)
-					);
-					break;
-
-				case 'color':
-					$default_color = isset( $field['default'] ) ? $field['default'] : '#000000';
-					printf(
-						'<input id="%1$s" name="%2$s[%3$s]" type="text" value="%4$s" class="ninoxa-settings__input ninoxa-settings__input--color" data-default-color="%5$s" />',
-						esc_attr( $input_id ),
-						esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
-						esc_attr( $field_id ),
-						esc_attr( $value ? $value : $default_color ),
-						esc_attr( $default_color )
-					);
-					break;
-
-				case 'text':
-				default:
-					printf(
-						'<input id="%1$s" name="%2$s[%3$s]" type="text" value="%4$s" class="%5$s" placeholder="%6$s" autocomplete="off" spellcheck="false" />',
-						esc_attr( $input_id ),
-						esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ),
-						esc_attr( $field_id ),
-						esc_attr( $value ),
-						esc_attr( isset( $field['input_class'] ) ? $field['input_class'] : 'regular-text ninoxa-settings__input' ),
-						esc_attr( isset( $field['placeholder'] ) ? $field['placeholder'] : '' )
-					);
-			}
+		$display_value = Ninoxa_Live_Search_Options::get_keyboard_shortcut_label( $value );
+		if ( '' === $display_value && '' !== $value ) {
+			$display_value = $value;
 		}
 
-		if ( 'keyboard_shortcut' === $field_id ) {
-			$label = Ninoxa_Live_Search_Options::get_keyboard_shortcut_label( $value );
-
-			if ( '' === $label ) {
-				$label = __( 'Disabled', 'ninoxa-live-search' );
-			}
-
-			echo '<div class="ninoxa-settings__preview">';
-			echo '<span class="ninoxa-settings__preview-label">' . esc_html__( 'Shown on search field', 'ninoxa-live-search' ) . '</span>';
-			echo '<span class="ninoxa-settings__chip" data-ninoxa-shortcut-preview data-state="' . esc_attr( __( 'Disabled', 'ninoxa-live-search' ) === $label ? 'disabled' : 'active' ) . '">' . esc_html( $label ) . '</span>';
-			echo '</div>';
+		$label = Ninoxa_Live_Search_Options::get_keyboard_shortcut_label( $value );
+		if ( '' === $label ) {
+			$label = __( 'Disabled', 'ninoxa-live-search' );
 		}
-
-		if ( ! empty( $field['description'] ) ) {
-			echo '<p class="description ninoxa-settings__description">' . esc_html( $field['description'] ) . '</p>';
-		}
-
-		echo '</div>';
+		?>
+		<div class="settings-field">
+			<div class="settings-field-header">
+				<label for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_html( $field['label'] ); ?></label>
+			</div>
+			<div class="ninoxa-settings__shortcut-control">
+				<input
+					id="<?php echo esc_attr( $input_id ); ?>"
+					name="<?php echo esc_attr( Ninoxa_Live_Search_Options::OPTION_NAME ); ?>[<?php echo esc_attr( $field_id ); ?>]"
+					type="text"
+					value="<?php echo esc_attr( $display_value ); ?>"
+					class="regular-text code ninoxa-settings__input ninoxa-settings__input--shortcut"
+					placeholder="<?php echo esc_attr( $field['placeholder'] ); ?>"
+					autocomplete="off"
+					spellcheck="false"
+					readonly="readonly"
+					inputmode="none"
+					aria-describedby="<?php echo esc_attr( $status_id ); ?>"
+					data-ninoxa-shortcut-input
+				/>
+				<button type="button" class="button button-secondary ninoxa-settings__shortcut-clear" data-ninoxa-shortcut-clear>
+					<?php esc_html_e( 'Clear', 'ninoxa-live-search' ); ?>
+				</button>
+			</div>
+			<p id="<?php echo esc_attr( $status_id ); ?>" class="settings-field-description ninoxa-settings__capture-hint" data-ninoxa-shortcut-status>
+				<?php esc_html_e( 'Focus the field and press the shortcut you want to use. Backspace or Delete clears it.', 'ninoxa-live-search' ); ?>
+			</p>
+			<div class="ninoxa-settings__preview">
+				<span class="ninoxa-settings__preview-label"><?php esc_html_e( 'Shown on search field', 'ninoxa-live-search' ); ?></span>
+				<span class="ninoxa-settings__chip" data-ninoxa-shortcut-preview data-state="<?php echo esc_attr( __( 'Disabled', 'ninoxa-live-search' ) === $label ? 'disabled' : 'active' ); ?>"><?php echo esc_html( $label ); ?></span>
+			</div>
+			<?php if ( ! empty( $field['description'] ) ) : ?>
+			<p class="settings-field-description"><?php echo esc_html( $field['description'] ); ?></p>
+			<?php endif; ?>
+		</div>
+		<?php
 	}
 
 	/**
