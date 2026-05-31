@@ -29,7 +29,87 @@ class Ninoxa_Live_Search_Options {
 			'loading_spinner_offset'   => '12',
 			'loading_sweep_enabled'    => '1',
 			'loading_sweep_speed'      => '1.4s',
+			'search_matching_enabled'  => '1',
+			'search_matching_default'  => 'keyword',
+			'search_match_keyword'     => '1',
+			'search_match_any'         => '0',
+			'search_match_sentence'    => '1',
+			'search_match_whole_word'  => '1',
+			'search_match_fuzzy'       => '0',
 		);
+	}
+
+	/**
+	 * Return the available search matching modes.
+	 *
+	 * Each mode maps to the option key that toggles its availability and a
+	 * human-readable label shown on the frontend control.
+	 *
+	 * @return array<string, array<string, string>>
+	 */
+	public static function get_match_modes() {
+		return array(
+			'keyword'    => array(
+				'setting' => 'search_match_keyword',
+				'label'   => __( 'All words', 'ninoxa-live-search' ),
+			),
+			'any'        => array(
+				'setting' => 'search_match_any',
+				'label'   => __( 'Any word', 'ninoxa-live-search' ),
+			),
+			'sentence'   => array(
+				'setting' => 'search_match_sentence',
+				'label'   => __( 'Exact phrase', 'ninoxa-live-search' ),
+			),
+			'whole_word' => array(
+				'setting' => 'search_match_whole_word',
+				'label'   => __( 'Whole word', 'ninoxa-live-search' ),
+			),
+			'fuzzy'      => array(
+				'setting' => 'search_match_fuzzy',
+				'label'   => __( 'Fuzzy', 'ninoxa-live-search' ),
+			),
+		);
+	}
+
+	/**
+	 * Return the matching modes enabled in settings, as key => label pairs.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function get_enabled_match_modes() {
+		$enabled = array();
+
+		foreach ( self::get_match_modes() as $mode_key => $mode ) {
+			if ( '1' === self::get( $mode['setting'] ) ) {
+				$enabled[ $mode_key ] = $mode['label'];
+			}
+		}
+
+		return $enabled;
+	}
+
+	/**
+	 * Return the default matching mode, falling back to the first enabled mode.
+	 *
+	 * @return string
+	 */
+	public static function get_default_match_mode() {
+		$enabled = self::get_enabled_match_modes();
+
+		if ( empty( $enabled ) ) {
+			return 'keyword';
+		}
+
+		$default = self::get( 'search_matching_default' );
+
+		if ( isset( $enabled[ $default ] ) ) {
+			return $default;
+		}
+
+		$keys = array_keys( $enabled );
+
+		return (string) reset( $keys );
 	}
 
 	/**

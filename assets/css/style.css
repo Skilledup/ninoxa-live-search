@@ -58,6 +58,55 @@ form.search {
     border-bottom: 1px solid #eee;
 }
 
+/* Matching-mode controls (native search modes) */
+.ninoxa-live-search-modes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px;
+    background: #f7f7f7;
+    border-bottom: 1px solid #eee;
+}
+
+.ninoxa-live-search-mode {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #444;
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 4px 10px;
+    border-radius: 999px;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.ninoxa-live-search-mode:hover {
+    border-color: #0073aa;
+    color: #0073aa;
+}
+
+.ninoxa-live-search-mode:focus {
+    outline: 2px solid #0073aa;
+    outline-offset: 1px;
+}
+
+.ninoxa-live-search-mode:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.ninoxa-live-search-mode:focus-visible {
+    outline: 2px solid #0073aa;
+    outline-offset: 1px;
+}
+
+.ninoxa-live-search-mode.is-active {
+    background: #0073aa;
+    border-color: #0073aa;
+    color: #fff;
+}
+
 .live-search-result:last-child {
     border-bottom: none;
 }

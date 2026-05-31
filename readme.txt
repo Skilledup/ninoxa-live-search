@@ -4,7 +4,7 @@ Tags: search, live search, ajax search, real-time search
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -21,6 +21,7 @@ Ninoxa Live Search adds an accessible, real-time AJAX-powered live search to you
 
 Features:
 * Real-time search results as you type
+* Frontend matching modes (keyword, any word, exact phrase, whole word, fuzzy) using the native WordPress search engine; fuzzy mode tolerates one-character typos via edit-distance-1 LIKE patterns
 * AJAX-powered with nonce security
 * Polylang and WPML compatible
 * Accessible (ARIA attributes)
@@ -55,7 +56,10 @@ Yes. It works out of the box with standard WordPress search forms across all the
 
 == Changelog ==
 
-= 1.2.0 =
+= 1.3.0 =
+* Added result matching modes (All words, Any word, Exact phrase, Whole word, and Fuzzy) powered entirely by the native WordPress and MySQL search engine; fuzzy mode uses edit-distance-1 LIKE patterns so "helo" matches "hello".
+* Visitors can switch the matching mode directly from the search field; results refresh instantly.
+* New "Matching" settings tab to enable the controls, choose available modes, and set the default mode.
 * Redesigned settings UI with card-based layout and dark blue color palette.
 * Three-tab settings navigation: General, Loading, and About.
 * CSS toggle switches for spinner and light sweep options.
@@ -83,5 +87,5 @@ Yes. It works out of the box with standard WordPress search forms across all the
 
 == Upgrade Notice ==
 
-= 1.2.0 =
-Redesigned settings UI. Update recommended.
+= 1.3.0 =
+Adds frontend search matching modes (keyword, whole word, fuzzy, and more) and Redesigned settings UI. Update recommended.

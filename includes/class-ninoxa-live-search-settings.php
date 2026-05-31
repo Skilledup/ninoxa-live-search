@@ -155,6 +155,12 @@ class Ninoxa_Live_Search_Settings {
 					</span>
 					<?php esc_html_e( 'Loading', 'ninoxa-live-search' ); ?>
 				</a>
+				<a href="#matching" class="nav-tab" data-ninoxa-tab="matching">
+					<span class="ninoxa-tab-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+					</span>
+					<?php esc_html_e( 'Matching', 'ninoxa-live-search' ); ?>
+				</a>
 				<a href="#about" class="nav-tab" data-ninoxa-tab="about">
 					<span class="ninoxa-tab-icon">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -174,6 +180,10 @@ class Ninoxa_Live_Search_Settings {
 
 						<div class="ninoxa-tab-pane" id="ninoxa-tab-loading" data-tab="loading">
 							<?php $this->render_tab_loading(); ?>
+						</div>
+
+						<div class="ninoxa-tab-pane" id="ninoxa-tab-matching" data-tab="matching">
+							<?php $this->render_tab_matching(); ?>
 						</div>
 
 						<div class="ninoxa-tab-pane" id="ninoxa-tab-about" data-tab="about">
@@ -297,6 +307,64 @@ class Ninoxa_Live_Search_Settings {
 	}
 
 	/**
+	 * Render the Matching tab content.
+	 *
+	 * @return void
+	 */
+	private function render_tab_matching() {
+		$options          = Ninoxa_Live_Search_Options::get_all();
+		$matching_enabled = isset( $options['search_matching_enabled'] ) && '1' === (string) $options['search_matching_enabled'];
+		$mode_fields      = array(
+			'search_match_keyword'    => __( 'Match every word in the query (the standard WordPress behaviour).', 'ninoxa-live-search' ),
+			'search_match_any'        => __( 'Match posts that contain any of the words (broader results).', 'ninoxa-live-search' ),
+			'search_match_sentence'   => __( 'Match the query as a single exact phrase.', 'ninoxa-live-search' ),
+			'search_match_whole_word' => __( 'Match whole words only, ignoring partial matches.', 'ninoxa-live-search' ),
+			'search_match_fuzzy'      => __( 'Fuzzy — tolerate one-character typos (missing, wrong, or extra letter).', 'ninoxa-live-search' ),
+		);
+		?>
+		<div class="ninoxa-settings-card ninoxa-settings-card-highlight">
+			<div class="settings-card-header">
+				<span class="settings-card-icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+				</span>
+				<h3><?php esc_html_e( 'Result Matching', 'ninoxa-live-search' ); ?></h3>
+			</div>
+			<div class="settings-card-body">
+				<p class="settings-card-intro"><?php esc_html_e( 'Let visitors switch how results are matched, right from the search field. Powered entirely by the native WordPress search engine.', 'ninoxa-live-search' ); ?></p>
+
+				<div class="settings-field">
+					<div class="settings-field-header">
+						<label for="ninoxa-live-search-search-matching-enabled"><?php esc_html_e( 'Show matching controls on the frontend', 'ninoxa-live-search' ); ?></label>
+						<?php $this->render_toggle( 'search_matching_enabled', $options, 'ninoxa-matching-options' ); ?>
+					</div>
+					<p class="settings-field-description"><?php esc_html_e( 'When enabled, a small set of buttons lets visitors choose the matching mode. At least two modes must be enabled for the controls to appear.', 'ninoxa-live-search' ); ?></p>
+				</div>
+
+				<div class="ninoxa-settings-collapsible<?php echo $matching_enabled ? ' is-expanded' : ''; ?>" id="ninoxa-matching-options">
+					<div class="ninoxa-settings-collapsible__inner">
+						<div class="settings-field">
+							<div class="settings-field-header">
+								<label><?php esc_html_e( 'Available matching modes', 'ninoxa-live-search' ); ?></label>
+							</div>
+							<?php foreach ( $mode_fields as $field_id => $description ) : ?>
+								<div class="settings-field-header ninoxa-matching-mode-row">
+									<label for="ninoxa-live-search-<?php echo esc_attr( str_replace( '_', '-', $field_id ) ); ?>">
+										<?php echo esc_html( $description ); ?>
+									</label>
+									<?php $this->render_toggle( $field_id, $options ); ?>
+								</div>
+							<?php endforeach; ?>
+						</div>
+
+						<?php $this->render_field_card( 'search_matching_default', $options ); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Render the About tab content.
 	 *
 	 * @return void
@@ -365,6 +433,26 @@ class Ninoxa_Live_Search_Settings {
 					<strong><?php esc_html_e( 'Performance', 'ninoxa-live-search' ); ?></strong>
 				</div>
 				<p><?php esc_html_e( 'Both indicators are pure CSS animations — zero JavaScript overhead, no impact on search speed.', 'ninoxa-live-search' ); ?></p>
+			</div>
+
+			<div class="sidebar-tip" data-sidebar-tab="matching">
+				<div class="tip-header">
+					<span class="tip-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+					</span>
+					<strong><?php esc_html_e( 'Native engine', 'ninoxa-live-search' ); ?></strong>
+				</div>
+				<p><?php esc_html_e( 'All matching modes use the built-in WordPress and MySQL search — no external services or indexes required.', 'ninoxa-live-search' ); ?></p>
+			</div>
+
+			<div class="sidebar-tip" data-sidebar-tab="matching">
+				<div class="tip-header">
+					<span class="tip-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+					</span>
+					<strong><?php esc_html_e( 'Fuzzy matching', 'ninoxa-live-search' ); ?></strong>
+				</div>
+				<p><?php esc_html_e( 'Fuzzy mode tolerates one-character typos (missing, wrong, or extra letter) by generating edit-distance-1 wildcard patterns. "helo" will match "hello".', 'ninoxa-live-search' ); ?></p>
 			</div>
 
 			<div class="sidebar-tip" data-sidebar-tab="about">
@@ -669,6 +757,10 @@ class Ninoxa_Live_Search_Settings {
 				'title'       => __( 'Loading indicators', 'ninoxa-live-search' ),
 				'description' => __( 'Configure the visual feedback shown on the search field while results are loading.', 'ninoxa-live-search' ),
 			),
+			'matching' => array(
+				'title'       => __( 'Result matching', 'ninoxa-live-search' ),
+				'description' => __( 'Choose which matching modes visitors can use while searching.', 'ninoxa-live-search' ),
+			),
 		);
 	}
 
@@ -758,6 +850,56 @@ class Ninoxa_Live_Search_Settings {
 					'2.0s' => __( 'Slow', 'ninoxa-live-search' ),
 				),
 				'description' => __( 'Set how quickly the light sweep animation travels across the input.', 'ninoxa-live-search' ),
+			),
+			'search_matching_enabled' => array(
+				'section'        => 'matching',
+				'label'          => __( 'Frontend matching controls', 'ninoxa-live-search' ),
+				'type'           => 'checkbox',
+				'checkbox_label' => __( 'Let visitors choose the matching mode from the search field', 'ninoxa-live-search' ),
+			),
+			'search_match_keyword'    => array(
+				'section'        => 'matching',
+				'label'          => __( 'All words', 'ninoxa-live-search' ),
+				'type'           => 'checkbox',
+				'checkbox_label' => __( 'Match every word in the query', 'ninoxa-live-search' ),
+			),
+			'search_match_any'        => array(
+				'section'        => 'matching',
+				'label'          => __( 'Any word', 'ninoxa-live-search' ),
+				'type'           => 'checkbox',
+				'checkbox_label' => __( 'Match any of the words in the query', 'ninoxa-live-search' ),
+			),
+			'search_match_sentence'   => array(
+				'section'        => 'matching',
+				'label'          => __( 'Exact phrase', 'ninoxa-live-search' ),
+				'type'           => 'checkbox',
+				'checkbox_label' => __( 'Match the query as a single exact phrase', 'ninoxa-live-search' ),
+			),
+			'search_match_whole_word' => array(
+				'section'        => 'matching',
+				'label'          => __( 'Whole word', 'ninoxa-live-search' ),
+				'type'           => 'checkbox',
+				'checkbox_label' => __( 'Match whole words only', 'ninoxa-live-search' ),
+			),
+			'search_match_fuzzy'      => array(
+				'section'        => 'matching',
+				'label'          => __( 'Fuzzy', 'ninoxa-live-search' ),
+				'type'           => 'checkbox',
+				'checkbox_label' => __( 'Tolerate one-character typos (missing, wrong, or extra letter)', 'ninoxa-live-search' ),
+			),
+			'search_matching_default' => array(
+				'section'     => 'matching',
+				'label'       => __( 'Default matching mode', 'ninoxa-live-search' ),
+				'type'        => 'select',
+				'default'     => 'keyword',
+				'options'     => array(
+					'keyword'    => __( 'All words', 'ninoxa-live-search' ),
+					'any'        => __( 'Any word', 'ninoxa-live-search' ),
+					'sentence'   => __( 'Exact phrase', 'ninoxa-live-search' ),
+					'whole_word' => __( 'Whole word', 'ninoxa-live-search' ),
+					'fuzzy'      => __( 'Fuzzy', 'ninoxa-live-search' ),
+				),
+				'description' => __( 'The mode selected by default when a visitor starts searching. It must be one of the enabled modes above.', 'ninoxa-live-search' ),
 			),
 		);
 	}

@@ -9,6 +9,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Ninoxa_Live_Search_Search {
 	/**
+	 * The matching mode applied to the active query.
+	 *
+	 * @var string
+	 */
+	private $active_match_mode = 'keyword';
+
+	/**
+	 * The raw search query for the active request.
+	 *
+	 * @var string
+	 */
+	private $active_search_query = '';
+
+	/**
 	 * Register AJAX hooks.
 	 *
 	 * @return void
@@ -142,16 +156,34 @@ class Ninoxa_Live_Search_Search {
 			$results_limit = 10;
 		}
 
-		$query = new WP_Query(
-			array(
-				's'                      => $search_query,
-				'post_status'            => 'publish',
-				'posts_per_page'         => $results_limit + 1,
-				'no_found_rows'          => true,
-				'update_post_meta_cache' => false,
-				'update_post_term_cache' => false,
-			)
+		$match_mode = $this->resolve_match_mode( isset( $_POST['match_mode'] ) ? sanitize_key( wp_unslash( $_POST['match_mode'] ) ) : '' );
+
+		$query_args = array(
+			's'                      => $search_query,
+			'post_status'            => 'publish',
+			'posts_per_page'         => $results_limit + 1,
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
 		);
+
+		if ( 'sentence' === $match_mode ) {
+			$query_args['sentence'] = true;
+		}
+
+		$this->active_match_mode   = $match_mode;
+		$this->active_search_query = $search_query;
+		$uses_custom_clause        = in_array( $match_mode, array( 'any', 'whole_word', 'fuzzy' ), true );
+
+		if ( $uses_custom_clause ) {
+			add_filter( 'posts_search', array( $this, 'filter_posts_search' ), 10, 2 );
+		}
+
+		$query = new WP_Query( $query_args );
+
+		if ( $uses_custom_clause ) {
+			remove_filter( 'posts_search', array( $this, 'filter_posts_search' ), 10 );
+		}
 
 		$has_more_results = $query->post_count > $results_limit;
 
@@ -200,6 +232,198 @@ class Ninoxa_Live_Search_Search {
 		wp_reset_postdata();
 		$this->restore_locale( $switched_locale );
 		wp_die();
+	}
+
+	/**
+	 * Resolve the requested matching mode against the enabled modes.
+	 *
+	 * Falls back to the configured default mode when the feature is disabled or
+	 * the requested mode is not allowed. The server is authoritative here so a
+	 * crafted request can never enable a mode the site owner turned off.
+	 *
+	 * @param string $requested_mode Mode requested by the client.
+	 * @return string
+	 */
+	private function resolve_match_mode( $requested_mode ) {
+		if ( '1' !== Ninoxa_Live_Search_Options::get( 'search_matching_enabled' ) ) {
+			return Ninoxa_Live_Search_Options::get_default_match_mode();
+		}
+
+		$enabled_modes = Ninoxa_Live_Search_Options::get_enabled_match_modes();
+
+		if ( '' !== $requested_mode && isset( $enabled_modes[ $requested_mode ] ) ) {
+			return $requested_mode;
+		}
+
+		return Ninoxa_Live_Search_Options::get_default_match_mode();
+	}
+
+	/**
+	 * Replace the core search SQL clause for the "any", "whole word" and
+	 * "fuzzy" matching modes using only native MySQL features.
+	 *
+	 * @param string   $search   Existing search SQL.
+	 * @param WP_Query $wp_query Query instance.
+	 * @return string
+	 */
+	public function filter_posts_search( $search, $wp_query ) {
+		global $wpdb;
+
+		$query = isset( $wp_query->query_vars['s'] ) ? (string) $wp_query->query_vars['s'] : $this->active_search_query;
+		$query = trim( $query );
+
+		if ( '' === $query ) {
+			return $search;
+		}
+
+		$terms = $this->split_search_terms( $query );
+
+		if ( empty( $terms ) ) {
+			return $search;
+		}
+
+		$mode    = $this->active_match_mode;
+		$columns = array(
+			$wpdb->posts . '.post_title',
+			$wpdb->posts . '.post_excerpt',
+			$wpdb->posts . '.post_content',
+		);
+
+		$term_clauses = array();
+
+		foreach ( $terms as $term ) {
+			$column_clauses = array();
+
+			if ( 'whole_word' === $mode ) {
+				$pattern = '(^|[^[:alnum:]])' . $this->escape_mysql_regex( $term ) . '([^[:alnum:]]|$)';
+
+				foreach ( $columns as $column ) {
+					$column_clauses[] = $wpdb->prepare( "{$column} REGEXP %s", $pattern ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
+			} else {
+				$like = '%' . $wpdb->esc_like( $term ) . '%';
+
+				foreach ( $columns as $column ) {
+					$column_clauses[] = $wpdb->prepare( "{$column} LIKE %s", $like ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				}
+
+				if ( 'fuzzy' === $mode ) {
+					foreach ( $this->get_fuzzy_like_patterns( $term ) as $pattern ) {
+						foreach ( $columns as $column ) {
+							$column_clauses[] = $wpdb->prepare( "{$column} LIKE %s", $pattern ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						}
+					}
+				}
+			}
+
+			$term_clauses[] = '(' . implode( ' OR ', $column_clauses ) . ')';
+		}
+
+		// Whole-word mode requires every term to be present; the broader "any"
+		// and "fuzzy" modes match when any term is found.
+		$glue = ( 'whole_word' === $mode ) ? ' AND ' : ' OR ';
+
+		return ' AND (' . implode( $glue, $term_clauses ) . ') ';
+	}
+
+	/**
+	 * Split a search query into individual terms.
+	 *
+	 * @param string $query Search query.
+	 * @return array<int, string>
+	 */
+	private function split_search_terms( $query ) {
+		$parts = preg_split( '/\s+/u', trim( $query ) );
+		$terms = array();
+
+		foreach ( (array) $parts as $part ) {
+			$part = trim( $part );
+
+			if ( '' !== $part && strlen( $part ) >= 2 ) {
+				$terms[ $part ] = $part;
+			}
+		}
+
+		if ( empty( $terms ) && '' !== trim( $query ) ) {
+			$terms[ trim( $query ) ] = trim( $query );
+		}
+
+		return array_slice( array_values( $terms ), 0, 10 );
+	}
+
+	/**
+	 * Escape MySQL REGEXP metacharacters in a search term.
+	 *
+	 * @param string $term Search term.
+	 * @return string
+	 */
+	private function escape_mysql_regex( $term ) {
+		return preg_replace( '/[.^$*+?()\[\]{}|\\\\]/', '\\\\$0', $term );
+	}
+
+	/**
+	 * Build native LIKE patterns that tolerate a single-character typo.
+	 *
+	 * Because MySQL has no built-in fuzzy/edit-distance operator, we emulate an
+	 * edit distance of one by generating LIKE patterns where one character is
+	 * substituted, deleted, or inserted using the single-character wildcard "_".
+	 * This lets "helo" match "hello", "wrold" match "world", etc. — all with the
+	 * native search engine and no extra dependencies.
+	 *
+	 * @param string $term Search term.
+	 * @return array<int, string> LIKE patterns (already wrapped in %…% and escaped).
+	 */
+	private function get_fuzzy_like_patterns( $term ) {
+		$chars = preg_split( '//u', $term, -1, PREG_SPLIT_NO_EMPTY );
+		$count = is_array( $chars ) ? count( $chars ) : 0;
+
+		// Only worthwhile for short-to-medium terms; very long terms explode the
+		// pattern count without improving relevance.
+		if ( $count < 3 || $count > 12 ) {
+			return array();
+		}
+
+		$variants = array();
+
+		// Substitution: one character replaced by any single character.
+		for ( $i = 0; $i < $count; $i++ ) {
+			$copy        = $chars;
+			$copy[ $i ]  = "\0wild\0";
+			$variants[]  = $copy;
+		}
+
+		// Insertion: the stored word has one extra character the visitor missed.
+		for ( $i = 0; $i <= $count; $i++ ) {
+			$copy       = $chars;
+			array_splice( $copy, $i, 0, array( "\0wild\0" ) );
+			$variants[] = $copy;
+		}
+
+		// Deletion: the visitor typed one extra character.
+		for ( $i = 0; $i < $count; $i++ ) {
+			$copy = $chars;
+			array_splice( $copy, $i, 1 );
+
+			if ( ! empty( $copy ) ) {
+				$variants[] = $copy;
+			}
+		}
+
+		global $wpdb;
+
+		$patterns = array();
+
+		foreach ( $variants as $variant ) {
+			$inner = '';
+
+			foreach ( $variant as $piece ) {
+				$inner .= ( "\0wild\0" === $piece ) ? '_' : $wpdb->esc_like( $piece );
+			}
+
+			$patterns[ $inner ] = '%' . $inner . '%';
+		}
+
+		return array_values( $patterns );
 	}
 
 	/**

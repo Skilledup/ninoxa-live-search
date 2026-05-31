@@ -229,7 +229,7 @@ jQuery(function ($) {
 	// Tab navigation (hash-based)
 	// -------------------------------------------------------------------------
 	function initTabs() {
-		var validTabs = ['general', 'loading', 'about'];
+		var validTabs = ['general', 'loading', 'matching', 'about'];
 
 		function activateTab(tabId) {
 			if (validTabs.indexOf(tabId) === -1) { tabId = 'general'; }

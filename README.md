@@ -8,6 +8,8 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 - Multilingual: Polylang, WPML, or fallback to default
 - Accessible: ARIA + keyboard navigation
 - Configurable keyboard shortcut with a dedicated settings screen
+- Frontend matching modes: All words, Any word, Exact phrase, Whole word, Fuzzy — switchable by the visitor directly from the search field
+- Fuzzy mode tolerates one-character typos via edit-distance-1 MySQL `LIKE` patterns (e.g. "helo" matches "hello") — no external dependencies
 - Secure: nonce + sanitized input
 - Translation-ready
 
@@ -26,6 +28,18 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 - **Enter**: Select highlighted result
 - **Escape**: Close search results
 - **Tab**: Close search results and move focus
+
+## Matching Modes
+
+A pill-button radiogroup appears inside the results dropdown, letting visitors switch modes without reloading the page. Controls are fully keyboard-accessible (arrow keys to move, Enter/Space to select, Escape to return to the input).
+
+| Mode | Behaviour |
+|---|---|
+| All words | Every typed word must appear (standard WordPress behaviour) |
+| Any word | Posts matching any typed word (broader results) |
+| Exact phrase | The full query treated as one phrase |
+| Whole word | Only whole-word matches, no partials |
+| Fuzzy | Tolerates one-character typos via edit-distance-1 `LIKE` patterns |
 
 ## Wordpress Directory
 

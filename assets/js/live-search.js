@@ -18,9 +18,110 @@ jQuery(document).ready(function ($) {
     const spinnerPosition = loadingSettings.loadingSpinnerPosition || 'right';
     const sweepEnabled    = loadingSettings.loadingSweepEnabled    !== false;
 
+    // Result matching settings (native WordPress search modes).
+    const matchingSettings = loadingSettings.matching || {};
+    const matchingModes    = matchingSettings.modes || {};
+    const matchingEnabled  = matchingSettings.enabled === true && Object.keys(matchingModes).length > 1;
+    let currentMatchMode   = matchingSettings.defaultMode && matchingModes[matchingSettings.defaultMode] ?
+        matchingSettings.defaultMode :
+        (Object.keys(matchingModes)[0] || 'keyword');
+
     // Generate unique IDs for ARIA relationships
     function generateUniqueId(prefix) {
         return prefix + '-' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Escape a string for safe insertion into HTML attributes/text.
+    function escapeHtml(value) {
+        return String(value == null ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    // Build the matching-mode control bar markup.
+    //
+    // Implemented as an ARIA radiogroup: exactly one mode is selected at a
+    // time, so each control is a role="radio" with aria-checked. A roving
+    // tabindex (only the active radio is in the tab order) plus arrow-key
+    // navigation provides full keyboard support per the WAI-ARIA radio pattern.
+    function buildMatchingBar() {
+        if (!matchingEnabled) {
+            return '';
+        }
+
+        const label = (liveSearchData.i18n && liveSearchData.i18n.matching_label) || 'Matching';
+        let html = '<div class="ninoxa-live-search-modes" role="radiogroup" aria-label="' + escapeHtml(label) + '">';
+
+        Object.keys(matchingModes).forEach(function (mode) {
+            const isActive = mode === currentMatchMode;
+            html += '<button type="button" class="ninoxa-live-search-mode' + (isActive ? ' is-active' : '') +
+                '" data-mode="' + escapeHtml(mode) + '" role="radio"' +
+                ' aria-checked="' + (isActive ? 'true' : 'false') + '"' +
+                ' tabindex="' + (isActive ? '0' : '-1') + '">' +
+                escapeHtml(matchingModes[mode]) + '</button>';
+        });
+
+        html += '</div>';
+
+        return html;
+    }
+
+    // Prepend the matching-mode bar to a results container.
+    function decorateResults($results) {
+        if (!matchingEnabled) {
+            return;
+        }
+
+        // If focus is currently inside the (about to be removed) control bar,
+        // restore it to the active radio after the bar is rebuilt so keyboard
+        // navigation is not interrupted by the results re-render.
+        const focusWasInGroup = $results.find('.ninoxa-live-search-mode').is(document.activeElement);
+
+        $results.find('.ninoxa-live-search-modes').remove();
+        $results.prepend(buildMatchingBar());
+
+        if (focusWasInGroup) {
+            $results.find('.ninoxa-live-search-mode[aria-checked="true"]').trigger('focus');
+        }
+    }
+
+    // Reflect the current mode on every rendered control bar, keeping the
+    // roving tabindex and aria-checked state in sync with currentMatchMode.
+    function syncMatchingBars() {
+        $('.ninoxa-live-search-mode').each(function () {
+            const isActive = String($(this).data('mode')) === currentMatchMode;
+            $(this)
+                .toggleClass('is-active', isActive)
+                .attr('aria-checked', isActive ? 'true' : 'false')
+                .attr('tabindex', isActive ? '0' : '-1');
+        });
+    }
+
+    // Apply a matching mode and re-run the active search.
+    //
+    // @param {string}  mode             Mode key to activate.
+    // @param {boolean} returnFocusToInput Whether to move focus back to the
+    //   search input (true for pointer activation) or keep it on the radio
+    //   group (false for keyboard navigation within the group).
+    function applyMatchMode(mode, returnFocusToInput) {
+        if (!mode || !matchingModes[mode] || mode === currentMatchMode) {
+            return;
+        }
+
+        currentMatchMode = mode;
+        syncMatchingBars();
+
+        if (activeSearchInput && activeSearchInput.length) {
+            clearTimeout(searchTimer);
+            executeLiveSearch(activeSearchInput);
+
+            if (returnFocusToInput) {
+                activeSearchInput.trigger('focus');
+            }
+        }
     }
 
     function normalizeShortcutKey(key) {
@@ -146,7 +247,8 @@ jQuery(document).ready(function ($) {
                 data: {
                     action: 'live_search',
                     s: searchQuery,
-                    nonce: liveSearchData.nonce
+                    nonce: liveSearchData.nonce,
+                    match_mode: currentMatchMode
                 },
                 timeout: 10000,
                 success: function(response) {
@@ -270,6 +372,137 @@ jQuery(document).ready(function ($) {
         activeSearchInput = null;
     }
 
+    // Run the AJAX search for an input and render the results. Shared by the
+    // debounced input handler and the matching-mode switch so both stay in sync.
+    function executeLiveSearch($input) {
+        const $wrapper = $input.parent('.search-input-wrapper');
+        const $form = $input.closest('form');
+        const $results = $form.find('.live-search-results');
+        const searchQuery = $input.val();
+
+        if (searchQuery.length < 3) {
+            closeResults($input, $results);
+            $wrapper.find('.live-search-loading').hide();
+            $wrapper.removeClass('ninoxa-live-search-sweeping');
+            return;
+        }
+
+        if (spinnerEnabled && !$wrapper.find('.live-search-loading').length) {
+            $wrapper.append('<div class="live-search-loading" aria-hidden="true"></div>');
+        }
+
+        const $loadingIndicator = $wrapper.find('.live-search-loading');
+
+        if (spinnerEnabled) {
+            $loadingIndicator.show();
+        }
+        if (sweepEnabled) {
+            $wrapper.addClass('ninoxa-live-search-sweeping');
+        }
+
+        performLiveSearch(searchQuery, $input, $results, $loadingIndicator)
+            .then(function (response) {
+                $results.html(response);
+                decorateResults($results);
+                const hasResults = $results.find('[role="option"]').length > 0;
+
+                if (hasResults) {
+                    $results.show();
+                    updateARIAAttributes($input, $results, true, true);
+
+                    // Announce results to screen readers
+                    const resultCount = $results.find('[role="option"]').length;
+                    const announcement = resultCount === 1 ?
+                        liveSearchData.i18n.one_suggestion :
+                        liveSearchData.i18n.suggestions_available.replace('%d', resultCount);
+
+                    // Create or update announcement element
+                    let $announcement = $('#live-search-announcement');
+                    if (!$announcement.length) {
+                        $announcement = $('<div id="live-search-announcement" class="screen-reader-text" aria-live="polite" aria-atomic="true"></div>');
+                        $('body').append($announcement);
+                    }
+                    $announcement.text(announcement);
+                } else {
+                    updateARIAAttributes($input, $results, false, false);
+                    $results.show(); // Still show "no results" message
+                }
+            })
+            .catch(function (error) {
+                console.error('Live Search: Search failed:', error);
+                $results.html('<div class="live-search-error" role="status" aria-live="polite">' + liveSearchData.i18n.search_unavailable + '</div>');
+                $results.show();
+            })
+            .finally(function () {
+                $loadingIndicator.hide();
+                $wrapper.removeClass('ninoxa-live-search-sweeping');
+            });
+    }
+
+    // Switch the active matching mode and re-run the current search.
+    $(document).on('click', '.ninoxa-live-search-mode', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        applyMatchMode(String($(this).data('mode')), true);
+    });
+
+    // Keyboard support for the matching radiogroup (WAI-ARIA radio pattern):
+    // arrow keys move focus to and select the adjacent radio (wrapping around),
+    // Home/End jump to the first/last, and Space/Enter selects the focused one.
+    $(document).on('keydown', '.ninoxa-live-search-mode', function (e) {
+        const $group = $(this).closest('.ninoxa-live-search-modes');
+        const $radios = $group.find('.ninoxa-live-search-mode');
+        const total = $radios.length;
+
+        if (total === 0) {
+            return;
+        }
+
+        const currentIndex = $radios.index(this);
+        let targetIndex = -1;
+
+        switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+                targetIndex = (currentIndex + 1) % total;
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                targetIndex = (currentIndex - 1 + total) % total;
+                break;
+            case 'Home':
+                targetIndex = 0;
+                break;
+            case 'End':
+                targetIndex = total - 1;
+                break;
+            case ' ':
+            case 'Spacebar':
+            case 'Enter':
+                e.preventDefault();
+                e.stopPropagation();
+                applyMatchMode(String($(this).data('mode')), false);
+                return;
+            case 'Escape':
+                e.preventDefault();
+                e.stopPropagation();
+                if (activeSearchInput && activeSearchInput.length) {
+                    activeSearchInput.trigger('focus');
+                }
+                return;
+            default:
+                return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const $target = $radios.eq(targetIndex);
+        $target.trigger('focus');
+        applyMatchMode(String($target.data('mode')), false);
+    });
+
     // Select and process search forms
     $('form[role="search"], .search-form, form.search').each(function () {
         let $form = $(this);
@@ -347,52 +580,9 @@ jQuery(document).ready(function ($) {
                 }
 
                 $results.hide();
-                const $loadingIndicator = $wrapper.find('.live-search-loading');
 
                 searchTimer = setTimeout(function () {
-                    if (spinnerEnabled) {
-                        $loadingIndicator.show();
-                    }
-                    if (sweepEnabled) {
-                        $wrapper.addClass('ninoxa-live-search-sweeping');
-                    }
-
-                    performLiveSearch(searchQuery, $input, $results, $loadingIndicator)
-                        .then(function(response) {
-                            $results.html(response);
-                            const hasResults = $results.find('[role="option"]').length > 0;
-                            
-                            if (hasResults) {
-                                $results.show();
-                                updateARIAAttributes($input, $results, true, true);
-                                
-                                // Announce results to screen readers
-                                const resultCount = $results.find('[role="option"]').length;
-                                const announcement = resultCount === 1 ? 
-                                    liveSearchData.i18n.one_suggestion : 
-                                    liveSearchData.i18n.suggestions_available.replace('%d', resultCount);
-                                
-                                // Create or update announcement element
-                                let $announcement = $('#live-search-announcement');
-                                if (!$announcement.length) {
-                                    $announcement = $('<div id="live-search-announcement" class="screen-reader-text" aria-live="polite" aria-atomic="true"></div>');
-                                    $('body').append($announcement);
-                                }
-                                $announcement.text(announcement);
-                            } else {
-                                updateARIAAttributes($input, $results, false, false);
-                                $results.show(); // Still show "no results" message
-                            }
-                        })
-                        .catch(function(error) {
-                            console.error('Live Search: Search failed:', error);
-                            $results.html('<div class="live-search-error" role="status" aria-live="polite">' + liveSearchData.i18n.search_unavailable + '</div>');
-                            $results.show();
-                        })
-                        .finally(function() {
-                            $loadingIndicator.hide();
-                            $wrapper.removeClass('ninoxa-live-search-sweeping');
-                        });
+                    executeLiveSearch($input);
                 }, 500);
             })
             .on('keydown', function (e) {
@@ -424,9 +614,11 @@ jQuery(document).ready(function ($) {
                         closeResults($input, $results);
                         break;
                     case 'Tab':
-                        // Close results when tabbing away
+                        // Close results when tabbing away — but keep them open
+                        // when focus moves into the results region (e.g. the
+                        // matching radiogroup controls).
                         setTimeout(function () {
-                            if (!$input.is(':focus')) {
+                            if (!$input.is(':focus') && !$.contains($results[0], document.activeElement)) {
                                 closeResults($input, $results);
                             }
                         }, 0);

@@ -76,6 +76,11 @@ class Ninoxa_Live_Search_Assets {
 					'loadingSpinnerEnabled'  => '0' !== Ninoxa_Live_Search_Options::get( 'loading_spinner_enabled' ),
 					'loadingSpinnerPosition' => Ninoxa_Live_Search_Options::get( 'loading_spinner_position' ) ?: 'right',
 					'loadingSweepEnabled'    => '0' !== Ninoxa_Live_Search_Options::get( 'loading_sweep_enabled' ),
+					'matching'               => array(
+						'enabled'     => '1' === Ninoxa_Live_Search_Options::get( 'search_matching_enabled' ),
+						'defaultMode' => Ninoxa_Live_Search_Options::get_default_match_mode(),
+						'modes'       => Ninoxa_Live_Search_Options::get_enabled_match_modes(),
+					),
 				),
 				'i18n'                 => array(
 					'search_suggestions'    => __( 'Search suggestions', 'ninoxa-live-search' ),
@@ -85,6 +90,7 @@ class Ninoxa_Live_Search_Assets {
 					'search_unavailable'    => __( 'Search temporarily unavailable. Please try again.', 'ninoxa-live-search' ),
 					'nonce_refresh_failed'  => __( 'Search security token refresh failed', 'ninoxa-live-search' ),
 					'search_failed'         => __( 'Search request failed', 'ninoxa-live-search' ),
+					'matching_label'        => __( 'Matching', 'ninoxa-live-search' ),
 				),
 			)
 		);

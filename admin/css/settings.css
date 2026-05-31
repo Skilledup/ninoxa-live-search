@@ -261,6 +261,16 @@
 	color: var(--ninoxa-ink);
 }
 
+.ninoxa-matching-mode-row {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid var(--ninoxa-border, #e2e4e7);
+}
+
+.ninoxa-matching-mode-row label {
+	font-weight: 500;
+}
+
 .settings-field-description {
 	margin: 8px 0 0;
 	font-size: 13px;
