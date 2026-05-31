@@ -537,6 +537,21 @@ jQuery(document).ready(function ($) {
             closeResults($input, $results);
         });
 
+        // Close the results once focus leaves the form entirely (e.g. tabbing
+        // past the last matching-mode button). Keeping focus within the form or
+        // the results region leaves the dropdown open so keyboard users can
+        // reach the matching controls.
+        $form.on('focusout', function () {
+            setTimeout(function () {
+                const active = document.activeElement;
+                const inForm = $form[0] && $.contains($form[0], active);
+                const inResults = $results[0] && $.contains($results[0], active);
+                if (!inForm && !inResults) {
+                    closeResults($input, $results);
+                }
+            }, 0);
+        });
+
         // Process input
         $input.not('.search-input-processed')
             .addClass('search-input-processed ninoxa-live-search-input')
@@ -614,11 +629,17 @@ jQuery(document).ready(function ($) {
                         closeResults($input, $results);
                         break;
                     case 'Tab':
-                        // Close results when tabbing away — but keep them open
-                        // when focus moves into the results region (e.g. the
-                        // matching radiogroup controls).
+                        // Keep the results open while focus stays inside the
+                        // search form (e.g. moving onto the submit button) or
+                        // within the results region (the matching radiogroup
+                        // controls). This lets keyboard users tab onto the
+                        // matching buttons instead of the dropdown closing the
+                        // moment focus leaves the input.
                         setTimeout(function () {
-                            if (!$input.is(':focus') && !$.contains($results[0], document.activeElement)) {
+                            const active = document.activeElement;
+                            const inResults = $results[0] && $.contains($results[0], active);
+                            const inForm = $form[0] && $.contains($form[0], active);
+                            if (!$input.is(':focus') && !inResults && !inForm) {
                                 closeResults($input, $results);
                             }
                         }, 0);

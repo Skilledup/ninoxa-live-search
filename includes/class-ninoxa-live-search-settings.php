@@ -646,17 +646,20 @@ class Ninoxa_Live_Search_Settings {
 		$field_defs = $this->get_fields();
 
 		foreach ( $field_defs as $field_id => $field ) {
+			$field_type = isset( $field['type'] ) ? $field['type'] : 'text';
+
+			// Unchecked checkboxes are absent from the POST payload, so a
+			// missing value must be treated as "off" rather than falling back
+			// to the previously saved value (which would prevent toggling off).
+			if ( 'checkbox' === $field_type ) {
+				$sanitized[ $field_id ] = ( isset( $input[ $field_id ] ) && '1' === (string) $input[ $field_id ] ) ? '1' : '0';
+				continue;
+			}
+
 			$raw_value = isset( $input[ $field_id ] ) ? $input[ $field_id ] : ( isset( $current[ $field_id ] ) ? $current[ $field_id ] : '' );
 
 			if ( isset( $field['sanitize_callback'] ) && is_callable( $field['sanitize_callback'] ) ) {
 				$sanitized[ $field_id ] = (string) call_user_func( $field['sanitize_callback'], $raw_value );
-				continue;
-			}
-
-			$field_type = isset( $field['type'] ) ? $field['type'] : 'text';
-
-			if ( 'checkbox' === $field_type ) {
-				$sanitized[ $field_id ] = '1' === (string) $raw_value ? '1' : '0';
 				continue;
 			}
 

@@ -32,6 +32,10 @@
 	color: var(--ninoxa-ink);
 }
 
+.rtl .ninoxa-settings {
+	margin: 20px 0 20px 20px;
+}
+
 /* Reset WP default h1 margin inside our wrapper */
 .ninoxa-settings h1 {
 	margin-bottom: 0;
