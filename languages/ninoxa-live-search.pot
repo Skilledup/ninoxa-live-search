@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-3.0.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ninoxa Live Search 1.1.1\n"
+"Project-Id-Version: Ninoxa Live Search 1.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ninoxa-live-search\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-21T21:22:50+00:00\n"
+"POT-Creation-Date: 2026-05-31T16:13:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ninoxa-live-search\n"
@@ -17,7 +17,7 @@ msgstr ""
 #. Plugin Name of the plugin
 #: ninoxa-live-search.php
 #: includes/class-ninoxa-live-search-settings.php:48
-#: includes/class-ninoxa-live-search-settings.php:155
+#: includes/class-ninoxa-live-search-settings.php:133
 msgid "Ninoxa Live Search"
 msgstr ""
 
@@ -41,58 +41,93 @@ msgstr ""
 msgid "https://profiles.wordpress.org/macse2/"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-assets.php:81
+#: includes/class-ninoxa-live-search-assets.php:86
 msgid "Search suggestions"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-assets.php:82
+#: includes/class-ninoxa-live-search-assets.php:87
 msgid "1 suggestion available"
 msgstr ""
 
 #. translators: %d is the number of suggestions available.
-#: includes/class-ninoxa-live-search-assets.php:84
+#: includes/class-ninoxa-live-search-assets.php:89
 #, php-format
 msgid "%d suggestions available"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-assets.php:85
+#: includes/class-ninoxa-live-search-assets.php:90
 msgid "Search temporarily unavailable. Please try again."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-assets.php:86
+#: includes/class-ninoxa-live-search-assets.php:91
 msgid "Search security token refresh failed"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-assets.php:87
+#: includes/class-ninoxa-live-search-assets.php:92
 msgid "Search request failed"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-search.php:111
+#: includes/class-ninoxa-live-search-assets.php:93
+#: includes/class-ninoxa-live-search-settings.php:162
+msgid "Matching"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-options.php:54
+#: includes/class-ninoxa-live-search-settings.php:862
+#: includes/class-ninoxa-live-search-settings.php:896
+msgid "All words"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-options.php:58
+#: includes/class-ninoxa-live-search-settings.php:868
+#: includes/class-ninoxa-live-search-settings.php:897
+msgid "Any word"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-options.php:62
+#: includes/class-ninoxa-live-search-settings.php:874
+#: includes/class-ninoxa-live-search-settings.php:898
+msgid "Exact phrase"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-options.php:66
+#: includes/class-ninoxa-live-search-settings.php:880
+#: includes/class-ninoxa-live-search-settings.php:899
+msgid "Whole word"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-options.php:70
+#: includes/class-ninoxa-live-search-settings.php:886
+#: includes/class-ninoxa-live-search-settings.php:900
+msgid "Fuzzy"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-search.php:125
 msgid "Missing nonce"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-search.php:123
+#: includes/class-ninoxa-live-search-search.php:137
 msgid "Invalid nonce"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-search.php:134
-#: includes/class-ninoxa-live-search-search.php:191
+#: includes/class-ninoxa-live-search-search.php:148
+#: includes/class-ninoxa-live-search-search.php:228
 msgid "no results found..."
 msgstr ""
 
 #. translators: 1: result index number, 2: post title.
-#: includes/class-ninoxa-live-search-search.php:161
+#: includes/class-ninoxa-live-search-search.php:198
 #, php-format
 msgid "Search result %1$d: %2$s"
 msgstr ""
 
 #. translators: %s is the search query.
-#: includes/class-ninoxa-live-search-search.php:178
+#: includes/class-ninoxa-live-search-search.php:215
 #, php-format
 msgid "View more search results for: %s"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-search.php:184
+#: includes/class-ninoxa-live-search-search.php:221
 msgid "More results..."
 msgstr ""
 
@@ -100,173 +135,383 @@ msgstr ""
 msgid "Ninoxa"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:126
-#: includes/class-ninoxa-live-search-settings.php:302
-#: includes/class-ninoxa-live-search-settings.php:307
+#: includes/class-ninoxa-live-search-settings.php:104
+#: includes/class-ninoxa-live-search-settings.php:596
+#: includes/class-ninoxa-live-search-settings.php:627
 msgid "Disabled"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:127
+#: includes/class-ninoxa-live-search-settings.php:105
 msgid "Focus the field and press the shortcut you want to use."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:128
+#: includes/class-ninoxa-live-search-settings.php:106
 msgid "Listening for your shortcut."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:129
+#: includes/class-ninoxa-live-search-settings.php:107
 msgid "Shortcut captured. Save settings to apply it."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:130
+#: includes/class-ninoxa-live-search-settings.php:108
 msgid "Shortcut cleared. Save settings to keep it disabled."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:131
+#: includes/class-ninoxa-live-search-settings.php:109
 msgid "Add one key besides Ctrl, Alt, Shift, or Cmd."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:132
-#: includes/class-ninoxa-live-search-settings.php:386
+#: includes/class-ninoxa-live-search-settings.php:110
+#: includes/class-ninoxa-live-search-settings.php:704
 msgid "Keyboard shortcut must contain one key and optional modifiers like Ctrl, Alt, Shift, or Cmd."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:158
+#: includes/class-ninoxa-live-search-settings.php:136
 msgid "AJAX-powered instant search results for your WordPress site."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:169
-msgid "Save settings"
+#: includes/class-ninoxa-live-search-settings.php:145
+msgid "Settings tabs"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:227
-msgid "Clear"
-msgstr ""
-
-#: includes/class-ninoxa-live-search-settings.php:233
-msgid "Focus the field and press the shortcut you want to use. Backspace or Delete clears it."
-msgstr ""
-
-#: includes/class-ninoxa-live-search-settings.php:244
-msgid "Enable"
-msgstr ""
-
-#: includes/class-ninoxa-live-search-settings.php:306
-msgid "Shown on search field"
-msgstr ""
-
-#: includes/class-ninoxa-live-search-settings.php:419
+#: includes/class-ninoxa-live-search-settings.php:150
+#: includes/class-ninoxa-live-search-settings.php:753
 msgid "General"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:420
-msgid "Choose how visitors trigger and use live search."
+#: includes/class-ninoxa-live-search-settings.php:156
+msgid "Loading"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:168
+msgid "About"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:194
+msgid "Save settings"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:219
+#: includes/class-ninoxa-live-search-settings.php:403
+msgid "Keyboard Shortcut"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:222
+msgid "Choose how visitors trigger live search from the keyboard."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:232
+msgid "Search Results"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:235
+msgid "Control the number of instant search results shown to visitors."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:257
+msgid "Loading Spinner"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:260
+msgid "Show a spinning indicator inside the search field while results load."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:264
+msgid "Enable spinner"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:287
+msgid "Light Sweep"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:290
+msgid "Animate a light sweep across the search field while results load."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:294
+msgid "Enable light sweep"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:318
+msgid "Match every word in the query (the standard WordPress behaviour)."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:319
+msgid "Match posts that contain any of the words (broader results)."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:320
+msgid "Match the query as a single exact phrase."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:321
+msgid "Match whole words only, ignoring partial matches."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:322
+msgid "Fuzzy — tolerate one-character typos (missing, wrong, or extra letter)."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:330
+msgid "Result Matching"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:333
+msgid "Let visitors switch how results are matched, right from the search field. Powered entirely by the native WordPress search engine."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:337
+msgid "Show matching controls on the frontend"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:340
+msgid "When enabled, a small set of buttons lets visitors choose the matching mode. At least two modes must be enabled for the controls to appear."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:347
+msgid "Available matching modes"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:376
+msgid "Ninoxa Live Search adds real-time, AJAX-powered search results to any standard WordPress search form. Results appear instantly as the visitor types — no page reload needed."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:377
+msgid "Compatible with Polylang and WPML for multilingual sites. Fully accessible with keyboard navigation and ARIA attributes. Lightweight with no external dependencies."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:380
+msgid "View on WordPress.org"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:405
+msgid "A shortcut hint badge appears inside the search field to guide visitors. Leave the shortcut empty to hide it entirely."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:413
+msgid "Examples"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:415
+msgid "Popular shortcuts: Ctrl+K for command-palette style, Ctrl+/ for search, or just / for quick access."
 msgstr ""
 
 #: includes/class-ninoxa-live-search-settings.php:423
-msgid "Loading indicators"
+msgid "Loading Indicators"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:424
-msgid "Configure the visual feedback shown on the search field while results are loading."
+#: includes/class-ninoxa-live-search-settings.php:425
+msgid "Spinner and light sweep can both be active at the same time for a richer loading experience."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:438
-msgid "Keyboard shortcut"
+#: includes/class-ninoxa-live-search-settings.php:433
+msgid "Performance"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:440
-msgid "Press keys"
+#: includes/class-ninoxa-live-search-settings.php:435
+msgid "Both indicators are pure CSS animations — zero JavaScript overhead, no impact on search speed."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:442
-msgid "Allowed keys: letters (A–Z), digits (0–9), symbols (/ . , ; - = [ ] ' `), function keys (F1–F12), and named keys — Enter, Escape, Backspace, Delete, Tab, Space, Insert, Home, End, Page Up, Page Down, and arrows. Combine with Ctrl, Alt, Shift, or Cmd. Leave empty to disable the shortcut and its hint."
+#: includes/class-ninoxa-live-search-settings.php:443
+msgid "Native engine"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:447
-msgid "Spinner"
-msgstr ""
-
-#: includes/class-ninoxa-live-search-settings.php:449
-msgid "Show a spinning indicator inside the search field while loading"
+#: includes/class-ninoxa-live-search-settings.php:445
+msgid "All matching modes use the built-in WordPress and MySQL search — no external services or indexes required."
 msgstr ""
 
 #: includes/class-ninoxa-live-search-settings.php:453
+msgid "Fuzzy matching"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:455
+msgid "Fuzzy mode tolerates one-character typos (missing, wrong, or extra letter) by generating edit-distance-1 wildcard patterns. \"helo\" will match \"hello\"."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:463
+msgid "Leave a Review"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:465
+msgid "Enjoying the plugin? A review on WordPress.org helps others discover it and motivates continued development."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:619
+msgid "Clear"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:623
+msgid "Focus the field and press the shortcut you want to use. Backspace or Delete clears it."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:626
+msgid "Shown on search field"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:754
+msgid "Choose how visitors trigger and use live search."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:757
+msgid "Loading indicators"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:758
+msgid "Configure the visual feedback shown on the search field while results are loading."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:761
+msgid "Result matching"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:762
+msgid "Choose which matching modes visitors can use while searching."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:776
+msgid "Keyboard shortcut"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:778
+msgid "Press keys"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:780
+msgid "Allowed keys: letters (A–Z), digits (0–9), symbols (/ . , ; - = [ ] ' `), function keys (F1–F12), and named keys — Enter, Escape, Backspace, Delete, Tab, Space, Insert, Home, End, Page Up, Page Down, and arrows. Combine with Ctrl, Alt, Shift, or Cmd. Leave empty to disable the shortcut and its hint."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:785
+msgid "Search results limit"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:787
+msgid "10"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:789
+msgid "Number of search results to display before showing the \"More results...\" link."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:794
+msgid "Spinner"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:796
+msgid "Show a spinning indicator inside the search field while loading"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:800
 msgid "Spinner position"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:457
+#: includes/class-ninoxa-live-search-settings.php:804
 msgid "Right"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:458
+#: includes/class-ninoxa-live-search-settings.php:805
 msgid "Left"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:460
+#: includes/class-ninoxa-live-search-settings.php:807
 msgid "Side of the search field where the spinner appears."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:464
+#: includes/class-ninoxa-live-search-settings.php:811
 msgid "Spinner color"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:467
+#: includes/class-ninoxa-live-search-settings.php:814
 msgid "Color of the spinning indicator arc."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:471
+#: includes/class-ninoxa-live-search-settings.php:818
 msgid "Spinner size"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:475
+#: includes/class-ninoxa-live-search-settings.php:822
 msgid "Small (14 px)"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:476
+#: includes/class-ninoxa-live-search-settings.php:823
 msgid "Medium (16 px)"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:477
+#: includes/class-ninoxa-live-search-settings.php:824
 msgid "Large (20 px)"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:482
+#: includes/class-ninoxa-live-search-settings.php:829
 msgid "Spinner offset"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:484
+#: includes/class-ninoxa-live-search-settings.php:831
 msgid "12"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:486
+#: includes/class-ninoxa-live-search-settings.php:833
 msgid "Distance from the left or right edge of the input in pixels."
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:491
+#: includes/class-ninoxa-live-search-settings.php:838
 msgid "Light sweep"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:493
+#: includes/class-ninoxa-live-search-settings.php:840
 msgid "Animate a light sweep across the search field while loading"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:497
+#: includes/class-ninoxa-live-search-settings.php:844
 msgid "Light sweep speed"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:501
+#: includes/class-ninoxa-live-search-settings.php:848
 msgid "Fast"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:502
+#: includes/class-ninoxa-live-search-settings.php:849
 msgid "Normal"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:503
+#: includes/class-ninoxa-live-search-settings.php:850
 msgid "Slow"
 msgstr ""
 
-#: includes/class-ninoxa-live-search-settings.php:505
+#: includes/class-ninoxa-live-search-settings.php:852
 msgid "Set how quickly the light sweep animation travels across the input."
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:856
+msgid "Frontend matching controls"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:858
+msgid "Let visitors choose the matching mode from the search field"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:864
+msgid "Match every word in the query"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:870
+msgid "Match any of the words in the query"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:876
+msgid "Match the query as a single exact phrase"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:882
+msgid "Match whole words only"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:888
+msgid "Tolerate one-character typos (missing, wrong, or extra letter)"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:892
+msgid "Default matching mode"
+msgstr ""
+
+#: includes/class-ninoxa-live-search-settings.php:902
+msgid "The mode selected by default when a visitor starts searching. It must be one of the enabled modes above."
 msgstr ""

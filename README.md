@@ -22,12 +22,24 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 
 ## Keyboard Shortcuts
 
+### Global
+
 - **Ctrl + /** by default: Focus the first available Ninoxa Live Search input on the page
 - Shortcut value is configurable from the **Ninoxa Live Search** admin menu
-- **Arrow Up/Down**: Navigate through search results
-- **Enter**: Select highlighted result
+
+### Search results
+
+- **Arrow Up / Arrow Down**: Navigate through search results
+- **Enter**: Open highlighted result
 - **Escape**: Close search results
-- **Tab**: Close search results and move focus
+- **Tab**: Move focus into the matching mode bar (keeps results open)
+
+### Matching mode bar
+
+- **Arrow Left / Arrow Right**: Move between matching modes
+- **Home / End**: Jump to first / last mode
+- **Enter / Space**: Activate the focused mode
+- **Escape**: Return focus to the search input
 
 ## Matching Modes
 
