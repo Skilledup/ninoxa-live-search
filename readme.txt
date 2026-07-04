@@ -4,7 +4,7 @@ Tags: search, live search, ajax search, real-time search
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -79,6 +79,7 @@ Yes. It works out of the box with standard WordPress search forms across all the
 
 = 1.3.3 =
 * Added optional type-to-search: typing two characters outside any input focuses the search field and inserts the typed text. Enable it from the General settings tab.
+* Improved WordPress Playground live preview with a dedicated front page and search block for easier demos.
 
 = 1.3.2 =
 * Added WordPress Playground live preview blueprint so visitors can try the plugin before installing.
