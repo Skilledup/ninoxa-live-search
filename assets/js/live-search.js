@@ -17,6 +17,7 @@ jQuery(document).ready(function ($) {
     const spinnerEnabled  = loadingSettings.loadingSpinnerEnabled  !== false;
     const spinnerPosition = loadingSettings.loadingSpinnerPosition || 'right';
     const sweepEnabled    = loadingSettings.loadingSweepEnabled    !== false;
+    const typeToSearchEnabled = loadingSettings.typeToSearchEnabled === true;
 
     // Result matching settings (native WordPress search modes).
     const matchingSettings = loadingSettings.matching || {};
@@ -209,6 +210,36 @@ jQuery(document).ready(function ($) {
         }
 
         $wrapper.attr('data-ninoxa-shortcut', shortcutLabel);
+    }
+
+    function getSearchInput() {
+        return $('.ninoxa-live-search-input').filter(function () {
+            const $input = $(this);
+
+            return $input.is(':visible') && !$input.prop('disabled') && !$input.prop('readonly');
+        }).first();
+    }
+
+    function isEditableTarget(el) {
+        if (!el || el === document.body) {
+            return false;
+        }
+
+        const tag = el.tagName;
+
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+            return true;
+        }
+
+        if (el.isContentEditable) {
+            return true;
+        }
+
+        return el.closest('[contenteditable=""], [contenteditable="true"]') !== null;
+    }
+
+    function isPrintableKey(event) {
+        return Boolean(event.key && event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey);
     }
 
     // Refresh nonce via AJAX (used when a search fails due to stale/cached nonce)
@@ -677,12 +708,7 @@ jQuery(document).ready(function ($) {
 
         e.preventDefault();
 
-        // Find the first visible Ninoxa Live Search input (only inputs processed by this plugin)
-        const $searchInput = $('.ninoxa-live-search-input').filter(function() {
-            const $input = $(this);
-
-            return $input.is(':visible') && !$input.prop('disabled') && !$input.prop('readonly');
-        }).first();
+        const $searchInput = getSearchInput();
 
         if ($searchInput.length > 0) {
             $searchInput.focus();
@@ -695,11 +721,116 @@ jQuery(document).ready(function ($) {
             $searchInput.select();
         }
     });
-    
+
+    // Type-to-search: buffer printable keys outside editable fields, then redirect
+    // to the search input once a second character confirms search intent.
+    let typeBuffer = '';
+    let typeBufferTimer = null;
+    let typeBufferMaxTimer = null;
+    const TYPE_BUFFER_IDLE_MS = 500;
+    const TYPE_BUFFER_MAX_MS = 1500;
+
+    function clearTypeBuffer() {
+        typeBuffer = '';
+
+        if (typeBufferTimer) {
+            clearTimeout(typeBufferTimer);
+            typeBufferTimer = null;
+        }
+
+        if (typeBufferMaxTimer) {
+            clearTimeout(typeBufferMaxTimer);
+            typeBufferMaxTimer = null;
+        }
+    }
+
+    function commitTypeBuffer(event) {
+        const $searchInput = getSearchInput();
+
+        if (!$searchInput.length || !typeBuffer) {
+            clearTypeBuffer();
+            return;
+        }
+
+        if (event && event.preventDefault) {
+            event.preventDefault();
+        }
+
+        $searchInput.focus();
+
+        $searchInput[0].scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+
+        $searchInput.val(typeBuffer);
+
+        const input = $searchInput[0];
+
+        if (input.setSelectionRange) {
+            input.setSelectionRange(typeBuffer.length, typeBuffer.length);
+        }
+
+        $searchInput.trigger('input');
+        clearTypeBuffer();
+    }
+
+    if (typeToSearchEnabled) {
+        $(document).on('keydown', function (e) {
+            if (e.isComposing) {
+                return;
+            }
+
+            if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+                return;
+            }
+
+            const active = document.activeElement;
+
+            if (isEditableTarget(active)) {
+                clearTypeBuffer();
+                return;
+            }
+
+            const $searchInput = getSearchInput();
+
+            if (!$searchInput.length) {
+                return;
+            }
+
+            if ($searchInput.is(':focus')) {
+                clearTypeBuffer();
+                return;
+            }
+
+            if (!isPrintableKey(e)) {
+                return;
+            }
+
+            if (typeBuffer.length === 0) {
+                typeBuffer += e.key;
+                typeBufferTimer = setTimeout(function () {
+                    if (typeBuffer.length === 1) {
+                        clearTypeBuffer();
+                    }
+                }, TYPE_BUFFER_IDLE_MS);
+                typeBufferMaxTimer = setTimeout(clearTypeBuffer, TYPE_BUFFER_MAX_MS);
+                return;
+            }
+
+            if (typeBuffer.length === 1) {
+                typeBuffer += e.key;
+                commitTypeBuffer(e);
+            }
+        });
+    }
+
     // Clean up timers when page unloads
     $(window).on('beforeunload', function() {
         if (searchTimer) {
             clearTimeout(searchTimer);
         }
+
+        clearTypeBuffer();
     });
 });

@@ -73,6 +73,7 @@ class Ninoxa_Live_Search_Assets {
 				'settings'             => array(
 					'keyboardShortcut'       => Ninoxa_Live_Search_Options::get_keyboard_shortcut(),
 					'keyboardShortcutLabel'  => Ninoxa_Live_Search_Options::get_keyboard_shortcut_label(),
+					'typeToSearchEnabled'    => '1' === Ninoxa_Live_Search_Options::get( 'type_to_search_enabled' ),
 					'loadingSpinnerEnabled'  => '0' !== Ninoxa_Live_Search_Options::get( 'loading_spinner_enabled' ),
 					'loadingSpinnerPosition' => Ninoxa_Live_Search_Options::get( 'loading_spinner_position' ) ?: 'right',
 					'loadingSweepEnabled'    => '0' !== Ninoxa_Live_Search_Options::get( 'loading_sweep_enabled' ),

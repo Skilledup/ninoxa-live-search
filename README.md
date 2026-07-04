@@ -8,6 +8,7 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 - Multilingual: Polylang, WPML, or fallback to default
 - Accessible: ARIA + keyboard navigation
 - Configurable keyboard shortcut with a dedicated settings screen
+- Optional type-to-search: start typing outside any input to focus the search field
 - Frontend matching modes: All words, Any word, Exact phrase, Whole word, Fuzzy — switchable by the visitor directly from the search field
 - Fuzzy mode tolerates one-character typos via edit-distance-1 MySQL `LIKE` patterns (e.g. "helo" matches "hello") — no external dependencies
 - Secure: nonce + sanitized input
@@ -26,6 +27,10 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 
 - **Ctrl + /** by default: Focus the first available Ninoxa Live Search input on the page
 - Shortcut value is configurable from the **Ninoxa Live Search** admin menu
+
+### Type-to-search (opt-in)
+
+When enabled in settings, typing **two printable characters in quick succession** anywhere on the page (outside inputs, textareas, and contenteditable regions) focuses the search field and inserts the typed text. A lone keypress is ignored, so accidental single-key bumps do not hijack focus. Works alongside the keyboard shortcut above. Disabled by default; leave off if your theme or plugins rely on single-key shortcuts. Inactive on touch-first devices.
 
 ### Search results
 

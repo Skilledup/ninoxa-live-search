@@ -221,6 +221,14 @@ class Ninoxa_Live_Search_Settings {
 			<div class="settings-card-body">
 				<p class="settings-card-intro"><?php esc_html_e( 'Choose how visitors trigger live search from the keyboard.', 'ninoxa-live-search' ); ?></p>
 				<?php $this->render_shortcut_field( $options ); ?>
+
+				<div class="settings-field">
+					<div class="settings-field-header">
+						<label for="ninoxa-live-search-type-to-search-enabled"><?php esc_html_e( 'Type-to-search', 'ninoxa-live-search' ); ?></label>
+						<?php $this->render_toggle( 'type_to_search_enabled', $options ); ?>
+					</div>
+					<p class="settings-field-description"><?php esc_html_e( 'When enabled, typing two printable characters in quick succession anywhere on the page (outside inputs) focuses the search field and inserts the typed text. Disabled by default; leave off if your theme or plugins use single-key shortcuts.', 'ninoxa-live-search' ); ?></p>
+				</div>
 			</div>
 		</div>
 
@@ -782,6 +790,13 @@ class Ninoxa_Live_Search_Settings {
 				'input_class'       => 'regular-text code ninoxa-settings__input',
 				'description'       => __( 'Allowed keys: letters (A–Z), digits (0–9), symbols (/ . , ; - = [ ] \' `), function keys (F1–F12), and named keys — Enter, Escape, Backspace, Delete, Tab, Space, Insert, Home, End, Page Up, Page Down, and arrows. Combine with Ctrl, Alt, Shift, or Cmd. Leave empty to disable the shortcut and its hint.', 'ninoxa-live-search' ),
 				'sanitize_callback' => array( $this, 'sanitize_keyboard_shortcut' ),
+			),
+			'type_to_search_enabled'  => array(
+				'section'        => 'general',
+				'label'          => __( 'Type-to-search', 'ninoxa-live-search' ),
+				'type'           => 'checkbox',
+				'checkbox_label' => __( 'Focus the search field when visitors type two characters outside any input', 'ninoxa-live-search' ),
+				'description'    => __( 'When enabled, typing two printable characters in quick succession anywhere on the page (outside inputs) focuses the search field and inserts the typed text. Disabled by default; leave off if your theme or plugins use single-key shortcuts.', 'ninoxa-live-search' ),
 			),
 			'search_results_limit'    => array(
 				'section'           => 'general',
