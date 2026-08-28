@@ -31,6 +31,13 @@ Features:
 * Optional focus outline on the search field (can be turned off to keep the theme's focus styles)
 * Lightweight and fast
 
+== Screenshots ==
+
+1. Live search on the frontend with matching mode controls and instant results.
+2. General settings: keyboard shortcut, type-to-search, and results limit.
+3. Loading settings: spinner and light sweep animations.
+4. Matching settings: enable modes and set the default matching behaviour.
+
 == Installation ==
 
 1. Upload the `ninoxa-live-search` folder to the `/wp-content/plugins/` directory.
