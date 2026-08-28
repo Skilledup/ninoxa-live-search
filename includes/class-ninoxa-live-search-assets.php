@@ -74,6 +74,7 @@ class Ninoxa_Live_Search_Assets {
 					'keyboardShortcut'       => Ninoxa_Live_Search_Options::get_keyboard_shortcut(),
 					'keyboardShortcutLabel'  => Ninoxa_Live_Search_Options::get_keyboard_shortcut_label(),
 					'typeToSearchEnabled'    => '1' === Ninoxa_Live_Search_Options::get( 'type_to_search_enabled' ),
+					'focusEffectsEnabled'    => '0' !== Ninoxa_Live_Search_Options::get( 'focus_effects_enabled' ),
 					'loadingSpinnerEnabled'  => '0' !== Ninoxa_Live_Search_Options::get( 'loading_spinner_enabled' ),
 					'loadingSpinnerPosition' => Ninoxa_Live_Search_Options::get( 'loading_spinner_position' ) ?: 'right',
 					'loadingSweepEnabled'    => '0' !== Ninoxa_Live_Search_Options::get( 'loading_sweep_enabled' ),
@@ -92,6 +93,8 @@ class Ninoxa_Live_Search_Assets {
 					'nonce_refresh_failed'  => __( 'Search security token refresh failed', 'ninoxa-live-search' ),
 					'search_failed'         => __( 'Search request failed', 'ninoxa-live-search' ),
 					'matching_label'        => __( 'Matching', 'ninoxa-live-search' ),
+					/* translators: %s is the matching mode label, e.g. "All words". */
+					'matching_mode_selected' => __( 'Matching: %s', 'ninoxa-live-search' ),
 				),
 			)
 		);

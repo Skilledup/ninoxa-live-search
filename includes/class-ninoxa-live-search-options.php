@@ -22,6 +22,7 @@ class Ninoxa_Live_Search_Options {
 		return array(
 			'keyboard_shortcut'        => 'ctrl+/',
 			'type_to_search_enabled'   => '0',
+			'focus_effects_enabled'    => '1',
 			'search_results_limit'     => '10',
 			'loading_spinner_enabled'  => '1',
 			'loading_spinner_position' => 'right',

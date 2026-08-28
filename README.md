@@ -8,8 +8,9 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 - Multilingual: Polylang, WPML, or fallback to default
 - Accessible: ARIA + keyboard navigation
 - Configurable keyboard shortcut with a dedicated settings screen
-- Optional type-to-search: start typing outside any input to focus the search field
-- Frontend matching modes: All words, Any word, Exact phrase, Whole word, Fuzzy — switchable by the visitor directly from the search field
+- Optional type-to-search: start typing outside any input to focus the search field (works in Firefox)
+- Optional plugin focus outline on the search field (can be turned off to keep theme styles)
+- Frontend matching modes: All words, Any word, Exact phrase, Whole word, Fuzzy — switchable from the search field, including Alt+1, Alt+2, … shortcuts
 - Fuzzy mode tolerates one-character typos via edit-distance-1 MySQL `LIKE` patterns (e.g. "helo" matches "hello") — no external dependencies
 - Secure: nonce + sanitized input
 - Translation-ready
@@ -30,7 +31,7 @@ AJAX-powered, instant search results for your WordPress search forms. Works out 
 
 ### Type-to-search (opt-in)
 
-When enabled in settings, typing **two printable characters in quick succession** anywhere on the page (outside inputs, textareas, and contenteditable regions) focuses the search field and inserts the typed text. A lone keypress is ignored, so accidental single-key bumps do not hijack focus. Works alongside the keyboard shortcut above. Disabled by default; leave off if your theme or plugins rely on single-key shortcuts. Inactive on touch-first devices.
+When enabled in settings, typing **two printable characters in quick succession** anywhere on the page (outside inputs, textareas, and contenteditable regions) focuses the search field and inserts the typed text. Keys are captured before the browser, so this also works in Firefox when find-as-you-type is enabled. A lone keypress is ignored, so accidental single-key bumps do not hijack focus. Works alongside the keyboard shortcut above. Disabled by default; leave off if your theme or plugins rely on single-key shortcuts. Inactive on touch-first devices.
 
 ### Search results
 
@@ -39,16 +40,19 @@ When enabled in settings, typing **two printable characters in quick succession*
 - **Escape**: Close search results
 - **Tab**: Move focus into the matching mode bar (keeps results open)
 
-### Matching mode bar
+### Matching modes
 
-- **Arrow Left / Arrow Right**: Move between matching modes
+While the search field or results are focused:
+
+- **Alt+1, Alt+2, …**: Select the matching mode in that position (the number is shown on each button)
+- **Arrow Left / Arrow Right**: Move between matching modes when a mode button is focused
 - **Home / End**: Jump to first / last mode
 - **Enter / Space**: Activate the focused mode
 - **Escape**: Return focus to the search input
 
 ## Matching Modes
 
-A pill-button radiogroup appears inside the results dropdown, letting visitors switch modes without reloading the page. Controls are fully keyboard-accessible (arrow keys to move, Enter/Space to select, Escape to return to the input).
+A pill-button radiogroup appears inside the results dropdown, letting visitors switch modes without reloading the page. The reliable keyboard path is **Alt+1, Alt+2, …** while the search field is focused (numbers are shown on the buttons). Clicking and the radio-group arrow keys still work as a fallback.
 
 | Mode | Behaviour |
 |---|---|

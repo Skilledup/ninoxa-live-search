@@ -18,6 +18,7 @@ jQuery(document).ready(function ($) {
     const spinnerPosition = loadingSettings.loadingSpinnerPosition || 'right';
     const sweepEnabled    = loadingSettings.loadingSweepEnabled    !== false;
     const typeToSearchEnabled = loadingSettings.typeToSearchEnabled === true;
+    const focusEffectsEnabled = loadingSettings.focusEffectsEnabled !== false;
 
     // Result matching settings (native WordPress search modes).
     const matchingSettings = loadingSettings.matching || {};
@@ -48,6 +49,8 @@ jQuery(document).ready(function ($) {
     // time, so each control is a role="radio" with aria-checked. A roving
     // tabindex (only the active radio is in the tab order) plus arrow-key
     // navigation provides full keyboard support per the WAI-ARIA radio pattern.
+    // Alt+1…n (while the search UI is focused) is the dedicated shortcut path
+    // so keyboard users do not have to tab into a bar that is rebuilt on AJAX.
     function buildMatchingBar() {
         if (!matchingEnabled) {
             return '';
@@ -56,13 +59,18 @@ jQuery(document).ready(function ($) {
         const label = (liveSearchData.i18n && liveSearchData.i18n.matching_label) || 'Matching';
         let html = '<div class="ninoxa-live-search-modes" role="radiogroup" aria-label="' + escapeHtml(label) + '">';
 
-        Object.keys(matchingModes).forEach(function (mode) {
+        Object.keys(matchingModes).forEach(function (mode, index) {
             const isActive = mode === currentMatchMode;
+            const shortcutNumber = String(index + 1);
             html += '<button type="button" class="ninoxa-live-search-mode' + (isActive ? ' is-active' : '') +
                 '" data-mode="' + escapeHtml(mode) + '" role="radio"' +
                 ' aria-checked="' + (isActive ? 'true' : 'false') + '"' +
-                ' tabindex="' + (isActive ? '0' : '-1') + '">' +
-                escapeHtml(matchingModes[mode]) + '</button>';
+                ' tabindex="' + (isActive ? '0' : '-1') + '"' +
+                ' aria-keyshortcuts="Alt+' + shortcutNumber + '"' +
+                ' title="' + escapeHtml(matchingModes[mode] + ' (Alt+' + shortcutNumber + ')') + '">' +
+                escapeHtml(matchingModes[mode]) +
+                '<kbd class="ninoxa-live-search-mode-key" aria-hidden="true">' + shortcutNumber + '</kbd>' +
+                '</button>';
         });
 
         html += '</div>';
@@ -70,23 +78,112 @@ jQuery(document).ready(function ($) {
         return html;
     }
 
-    // Prepend the matching-mode bar to a results container.
-    function decorateResults($results) {
+    // Results items live in an inner list so the matching bar is not destroyed
+    // when AJAX replaces the HTML (that was dropping keyboard focus).
+    function getResultsList($results) {
+        let $list = $results.children('.live-search-results-list');
+
+        if (!$list.length) {
+            const listId = ($results.attr('id') || generateUniqueId('live-search-results')) + '-list';
+            $list = $('<div class="live-search-results-list"></div>').attr({
+                id: listId,
+                role: 'listbox',
+                'aria-label': liveSearchData.i18n.search_suggestions
+            });
+            $results.append($list);
+        }
+
+        return $list;
+    }
+
+    function showResultsPanel($results) {
+        $results.css('display', 'flex');
+    }
+
+    // Keep the matching-mode bar as a stable sibling of the results list.
+    function ensureMatchingBar($results) {
         if (!matchingEnabled) {
             return;
         }
 
-        // If focus is currently inside the (about to be removed) control bar,
-        // restore it to the active radio after the bar is rebuilt so keyboard
-        // navigation is not interrupted by the results re-render.
-        const focusWasInGroup = $results.find('.ninoxa-live-search-mode').is(document.activeElement);
-
-        $results.find('.ninoxa-live-search-modes').remove();
-        $results.prepend(buildMatchingBar());
-
-        if (focusWasInGroup) {
-            $results.find('.ninoxa-live-search-mode[aria-checked="true"]').trigger('focus');
+        if (!$results.children('.ninoxa-live-search-modes').length) {
+            $results.prepend(buildMatchingBar());
+            return;
         }
+
+        syncMatchingBars();
+    }
+
+    function announce(message) {
+        if (!message) {
+            return;
+        }
+
+        let $announcement = $('#live-search-announcement');
+
+        if (!$announcement.length) {
+            $announcement = $('<div id="live-search-announcement" class="screen-reader-text" aria-live="polite" aria-atomic="true"></div>');
+            $('body').append($announcement);
+        }
+
+        $announcement.text(message);
+    }
+
+    function isSearchUiFocused() {
+        const active = document.activeElement;
+
+        if (!active || active === document.body) {
+            return false;
+        }
+
+        const $active = $(active);
+
+        return $active.hasClass('ninoxa-live-search-input') ||
+            $active.closest('.live-search-results, .search-input-wrapper').length > 0;
+    }
+
+    // Prefer event.code so Alt+1 still matches on layouts where Option+1
+    // produces a special character (macOS).
+    function getDigitFromEvent(event) {
+        const codeMatch = String(event.code || '').match(/^(?:Digit|Numpad)([1-9])$/);
+
+        if (codeMatch) {
+            return parseInt(codeMatch[1], 10);
+        }
+
+        const key = String(event.key || '');
+
+        if (/^[1-9]$/.test(key)) {
+            return parseInt(key, 10);
+        }
+
+        return 0;
+    }
+
+    function applyMatchingShortcut(event) {
+        if (!matchingEnabled || event.repeat) {
+            return false;
+        }
+
+        if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+            return false;
+        }
+
+        if (!isSearchUiFocused()) {
+            return false;
+        }
+
+        const digit = getDigitFromEvent(event);
+        const modes = Object.keys(matchingModes);
+
+        if (digit < 1 || digit > modes.length) {
+            return false;
+        }
+
+        event.preventDefault();
+        applyMatchMode(modes[digit - 1], true);
+
+        return true;
     }
 
     // Reflect the current mode on every rendered control bar, keeping the
@@ -113,7 +210,11 @@ jQuery(document).ready(function ($) {
         }
 
         currentMatchMode = mode;
+        selectedResultIndex = -1;
         syncMatchingBars();
+
+        const selectedTemplate = (liveSearchData.i18n && liveSearchData.i18n.matching_mode_selected) || 'Matching: %s';
+        announce(selectedTemplate.replace('%s', matchingModes[mode]));
 
         if (activeSearchInput && activeSearchInput.length) {
             clearTimeout(searchTimer);
@@ -242,6 +343,40 @@ jQuery(document).ready(function ($) {
         return Boolean(event.key && event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey);
     }
 
+    function isTypeToSearchCharacter(event) {
+        if (!isPrintableKey(event) || event.repeat) {
+            return false;
+        }
+
+        // Leave Space for page scrolling; it is a printable key but not a
+        // search-intent character.
+        return event.key !== ' ';
+    }
+
+    function isTypeToSearchContext(event) {
+        if (event.isComposing) {
+            return false;
+        }
+
+        if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+            return false;
+        }
+
+        const active = document.activeElement;
+
+        if (isEditableTarget(active)) {
+            return false;
+        }
+
+        const $searchInput = getSearchInput();
+
+        if (!$searchInput.length || $searchInput.is(':focus')) {
+            return false;
+        }
+
+        return true;
+    }
+
     // Refresh nonce via AJAX (used when a search fails due to stale/cached nonce)
     function refreshNonce() {
         return new Promise(function(resolve, reject) {
@@ -312,7 +447,8 @@ jQuery(document).ready(function ($) {
 
     // Update ARIA attributes based on results state
     function updateARIAAttributes($input, $results, hasResults, isExpanded) {
-        const resultsId = $results.attr('id');
+        const $list = $results.children('.live-search-results-list');
+        const resultsId = ($list.length && $list.attr('id')) ? $list.attr('id') : $results.attr('id');
         
         // Set basic attributes
         $input.attr('aria-expanded', isExpanded ? 'true' : 'false');
@@ -336,11 +472,13 @@ jQuery(document).ready(function ($) {
             $input.removeAttr('aria-activedescendant');
         }
         
-        // Set aria-live on results container when needed
-        if (hasResults && isExpanded) {
-            $results.attr('aria-live', 'polite');
-        } else {
-            $results.removeAttr('aria-live');
+        // Set aria-live on the listbox when needed
+        if ($list.length) {
+            if (hasResults && isExpanded) {
+                $list.attr('aria-live', 'polite');
+            } else {
+                $list.removeAttr('aria-live');
+            }
         }
     }
 
@@ -403,6 +541,13 @@ jQuery(document).ready(function ($) {
         activeSearchInput = null;
     }
 
+    function renderResultsHtml($results, html) {
+        const $list = getResultsList($results);
+        $list.html(html);
+        ensureMatchingBar($results);
+        return $list;
+    }
+
     // Run the AJAX search for an input and render the results. Shared by the
     // debounced input handler and the matching-mode switch so both stay in sync.
     function executeLiveSearch($input) {
@@ -433,12 +578,11 @@ jQuery(document).ready(function ($) {
 
         performLiveSearch(searchQuery, $input, $results, $loadingIndicator)
             .then(function (response) {
-                $results.html(response);
-                decorateResults($results);
+                renderResultsHtml($results, response);
                 const hasResults = $results.find('[role="option"]').length > 0;
 
                 if (hasResults) {
-                    $results.show();
+                    showResultsPanel($results);
                     updateARIAAttributes($input, $results, true, true);
 
                     // Announce results to screen readers
@@ -447,22 +591,16 @@ jQuery(document).ready(function ($) {
                         liveSearchData.i18n.one_suggestion :
                         liveSearchData.i18n.suggestions_available.replace('%d', resultCount);
 
-                    // Create or update announcement element
-                    let $announcement = $('#live-search-announcement');
-                    if (!$announcement.length) {
-                        $announcement = $('<div id="live-search-announcement" class="screen-reader-text" aria-live="polite" aria-atomic="true"></div>');
-                        $('body').append($announcement);
-                    }
-                    $announcement.text(announcement);
+                    announce(announcement);
                 } else {
                     updateARIAAttributes($input, $results, false, false);
-                    $results.show(); // Still show "no results" message
+                    showResultsPanel($results); // Still show "no results" message
                 }
             })
             .catch(function (error) {
                 console.error('Live Search: Search failed:', error);
-                $results.html('<div class="live-search-error" role="status" aria-live="polite">' + liveSearchData.i18n.search_unavailable + '</div>');
-                $results.show();
+                renderResultsHtml($results, '<div class="live-search-error" role="status" aria-live="polite">' + liveSearchData.i18n.search_unavailable + '</div>');
+                showResultsPanel($results);
             })
             .finally(function () {
                 $loadingIndicator.hide();
@@ -548,13 +686,10 @@ jQuery(document).ready(function ($) {
         const resultsId = generateUniqueId('live-search-results');
         const inputId = $input.attr('id') || generateUniqueId('live-search-input');
         
-        // Set up ARIA attributes
+        // Set up ARIA attributes. The outer panel is a visual dropdown; the
+        // inner list is the listbox so matching controls are not listbox children.
         $input.attr('id', inputId);
-        $results.attr({
-            'id': resultsId,
-            'role': 'listbox',
-            'aria-label': liveSearchData.i18n.search_suggestions
-        });
+        $results.attr('id', resultsId);
 
         // Prevent form submission for live search
         $form.on('submit', function (e) {
@@ -601,6 +736,14 @@ jQuery(document).ready(function ($) {
                 const $wrapper = $(this).parent('.search-input-wrapper');
                 $wrapper.attr('data-ninoxa-spinner-position', spinnerPosition);
                 applyShortcutHint($wrapper);
+
+                if (focusEffectsEnabled) {
+                    $wrapper.addClass('ninoxa-live-search-focus-effects');
+                }
+
+                if (sweepEnabled && !$wrapper.children('.ninoxa-live-search-sweep').length) {
+                    $wrapper.append('<span class="ninoxa-live-search-sweep" aria-hidden="true"></span>');
+                }
             })
             .on('input', function () {
                 clearTimeout(searchTimer);
@@ -776,36 +919,22 @@ jQuery(document).ready(function ($) {
     }
 
     if (typeToSearchEnabled) {
-        $(document).on('keydown', function (e) {
-            if (e.isComposing) {
+        // Capture-phase listeners call preventDefault on the first character as
+        // well as the second. Firefox's "Search for text when you start typing"
+        // (and Quick Find) otherwise consume those keys before the page sees them.
+        window.addEventListener('keydown', function (e) {
+            if (!isTypeToSearchContext(e)) {
+                if (typeBuffer && isEditableTarget(document.activeElement)) {
+                    clearTypeBuffer();
+                }
                 return;
             }
 
-            if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+            if (!isTypeToSearchCharacter(e)) {
                 return;
             }
 
-            const active = document.activeElement;
-
-            if (isEditableTarget(active)) {
-                clearTypeBuffer();
-                return;
-            }
-
-            const $searchInput = getSearchInput();
-
-            if (!$searchInput.length) {
-                return;
-            }
-
-            if ($searchInput.is(':focus')) {
-                clearTypeBuffer();
-                return;
-            }
-
-            if (!isPrintableKey(e)) {
-                return;
-            }
+            e.preventDefault();
 
             if (typeBuffer.length === 0) {
                 typeBuffer += e.key;
@@ -822,7 +951,22 @@ jQuery(document).ready(function ($) {
                 typeBuffer += e.key;
                 commitTypeBuffer(e);
             }
-        });
+        }, true);
+
+        window.addEventListener('keypress', function (e) {
+            if (!isTypeToSearchContext(e) || !isTypeToSearchCharacter(e)) {
+                return;
+            }
+
+            // Some Firefox builds start find-as-you-type from keypress.
+            e.preventDefault();
+        }, true);
+    }
+
+    if (matchingEnabled) {
+        window.addEventListener('keydown', function (e) {
+            applyMatchingShortcut(e);
+        }, true);
     }
 
     // Clean up timers when page unloads

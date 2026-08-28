@@ -3,7 +3,7 @@
 Plugin Name: Ninoxa Live Search
 Plugin URI: https://wordpress.org/plugins/ninoxa-live-search/
 Description: A plugin to add live search functionality to your WordPress site.
-Version: 1.3.3
+Version: 1.3.4
 Author: Mohammad Anbarestany
 Author URI: https://profiles.wordpress.org/macse2/
 Text Domain: ninoxa-live-search
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'NINOXA_LIVE_SEARCH_VERSION' ) ) {
-	define( 'NINOXA_LIVE_SEARCH_VERSION', '1.3.3' );
+	define( 'NINOXA_LIVE_SEARCH_VERSION', '1.3.4' );
 }
 
 if ( ! defined( 'NINOXA_LIVE_SEARCH_PATH' ) ) {

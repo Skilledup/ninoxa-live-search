@@ -2,9 +2,9 @@
 Contributors: macse2
 Tags: search, live search, ajax search, real-time search
 Requires at least: 5.0
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -18,7 +18,7 @@ Ninoxa Live Search adds an accessible, real-time AJAX-powered live search to you
 * Min query: 3 chars. Shows configurable number of results (defaults to 10) + a "More results..." link.
 * Manage plugin options from the **Ninoxa Live Search** admin menu.
 * The default shortcut is **Ctrl + /**, and you can replace it with your own key combination or disable it completely.
-* Optional **type-to-search**: when enabled, typing two characters outside any input focuses the search field and inserts the text.
+* Optional **type-to-search**: when enabled, typing two characters outside any input focuses the search field and inserts the text. Works in Firefox even when find-as-you-type is enabled.
 
 Features:
 * Real-time search results as you type
@@ -27,7 +27,8 @@ Features:
 * Polylang and WPML compatible
 * Accessible (ARIA attributes)
 * Configurable keyboard shortcut
-* Optional type-to-search (focus search when typing two characters outside any input; disabled by default)
+* Optional type-to-search (focus search when typing two characters outside any input; disabled by default; works in Firefox)
+* Optional focus outline on the search field (can be turned off to keep the theme's focus styles)
 * Lightweight and fast
 
 == Installation ==
@@ -47,6 +48,7 @@ Global:
 Type-to-search (opt-in):
 
 * When enabled in settings, typing **two printable characters in quick succession** anywhere on the page (outside inputs, textareas, and contenteditable regions) focuses the search field and inserts the typed text
+* Keys are captured before the browser, so this works in Firefox even when "Search for text when you start typing" is enabled
 * A lone keypress is ignored, so accidental single-key bumps do not hijack focus
 * Works alongside the keyboard shortcut above; disabled by default
 * Inactive on touch-first devices
@@ -58,9 +60,10 @@ Search results:
 * **Escape**: Close search results
 * **Tab**: Move focus into the matching mode bar (keeps results open)
 
-Matching mode bar:
+Matching modes (while the search field or results are focused):
 
-* **Arrow Left/Right**: Move between matching modes
+* **Alt+1, Alt+2, …**: Select the matching mode in that position (shown as a number on each button)
+* **Arrow Left/Right**: Move between matching modes when a mode button is focused
 * **Home/End**: Jump to first / last mode
 * **Enter / Space**: Activate the focused mode
 * **Escape**: Return focus to the search input
@@ -76,6 +79,12 @@ Yes. It supports both Polylang and WPML.
 Yes. It works out of the box with standard WordPress search forms across all themes.
 
 == Changelog ==
+
+= 1.3.4 =
+* Fixed the search field focus outline disappearing while results are loading (the light sweep no longer clips it).
+* Added an optional focus outline setting so the plugin ring can be turned off in favor of the theme's focus styles.
+* Added dedicated matching-mode shortcuts: Alt+1, Alt+2, and so on while the search field is focused. The matching bar is no longer rebuilt on every AJAX refresh, which was making keyboard navigation unreliable.
+* Fixed type-to-search in Firefox by capturing keys before the browser's find-as-you-type / Quick Find.
 
 = 1.3.3 =
 * Added optional type-to-search: typing two characters outside any input focuses the search field and inserts the typed text. Enable it from the General settings tab.
@@ -118,6 +127,9 @@ Yes. It works out of the box with standard WordPress search forms across all the
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.3.4 =
+Improves keyboard matching-mode shortcuts, keeps the search focus ring visible while loading, and fixes type-to-search in Firefox.
 
 = 1.3.3 =
 Adds optional type-to-search for keyboard-first visitors. Disabled by default.

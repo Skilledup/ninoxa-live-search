@@ -227,7 +227,15 @@ class Ninoxa_Live_Search_Settings {
 						<label for="ninoxa-live-search-type-to-search-enabled"><?php esc_html_e( 'Type-to-search', 'ninoxa-live-search' ); ?></label>
 						<?php $this->render_toggle( 'type_to_search_enabled', $options ); ?>
 					</div>
-					<p class="settings-field-description"><?php esc_html_e( 'When enabled, typing two printable characters in quick succession anywhere on the page (outside inputs) focuses the search field and inserts the typed text. Disabled by default; leave off if your theme or plugins use single-key shortcuts.', 'ninoxa-live-search' ); ?></p>
+					<p class="settings-field-description"><?php esc_html_e( 'When enabled, typing two printable characters in quick succession anywhere on the page (outside inputs) focuses the search field and inserts the typed text. Keys are captured before the browser so this also works in Firefox when "Search for text when you start typing" is on. Disabled by default; leave off if your theme or plugins use single-key shortcuts.', 'ninoxa-live-search' ); ?></p>
+				</div>
+
+				<div class="settings-field">
+					<div class="settings-field-header">
+						<label for="ninoxa-live-search-focus-effects-enabled"><?php esc_html_e( 'Focus outline', 'ninoxa-live-search' ); ?></label>
+						<?php $this->render_toggle( 'focus_effects_enabled', $options ); ?>
+					</div>
+					<p class="settings-field-description"><?php esc_html_e( 'Show the plugin\'s focus outline and box shadow on the search field. Turn this off to keep your theme\'s focus styles instead.', 'ninoxa-live-search' ); ?></p>
 				</div>
 			</div>
 		</div>
@@ -345,7 +353,7 @@ class Ninoxa_Live_Search_Settings {
 						<label for="ninoxa-live-search-search-matching-enabled"><?php esc_html_e( 'Show matching controls on the frontend', 'ninoxa-live-search' ); ?></label>
 						<?php $this->render_toggle( 'search_matching_enabled', $options, 'ninoxa-matching-options' ); ?>
 					</div>
-					<p class="settings-field-description"><?php esc_html_e( 'When enabled, a small set of buttons lets visitors choose the matching mode. At least two modes must be enabled for the controls to appear.', 'ninoxa-live-search' ); ?></p>
+					<p class="settings-field-description"><?php esc_html_e( 'When enabled, a small set of buttons lets visitors choose the matching mode. At least two modes must be enabled for the controls to appear. While the search field is focused, Alt+1, Alt+2, and so on switch modes without leaving the input.', 'ninoxa-live-search' ); ?></p>
 				</div>
 
 				<div class="ninoxa-settings-collapsible<?php echo $matching_enabled ? ' is-expanded' : ''; ?>" id="ninoxa-matching-options">
@@ -451,6 +459,16 @@ class Ninoxa_Live_Search_Settings {
 					<strong><?php esc_html_e( 'Native engine', 'ninoxa-live-search' ); ?></strong>
 				</div>
 				<p><?php esc_html_e( 'All matching modes use the built-in WordPress and MySQL search — no external services or indexes required.', 'ninoxa-live-search' ); ?></p>
+			</div>
+
+			<div class="sidebar-tip" data-sidebar-tab="matching">
+				<div class="tip-header">
+					<span class="tip-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+					</span>
+					<strong><?php esc_html_e( 'Keyboard shortcuts', 'ninoxa-live-search' ); ?></strong>
+				</div>
+				<p><?php esc_html_e( 'While the search field is focused, Alt+1, Alt+2, and so on select the matching modes in order. That keeps focus in the input, so switching modes does not fight with result navigation or AJAX refreshes.', 'ninoxa-live-search' ); ?></p>
 			</div>
 
 			<div class="sidebar-tip" data-sidebar-tab="matching">
@@ -796,7 +814,14 @@ class Ninoxa_Live_Search_Settings {
 				'label'          => __( 'Type-to-search', 'ninoxa-live-search' ),
 				'type'           => 'checkbox',
 				'checkbox_label' => __( 'Focus the search field when visitors type two characters outside any input', 'ninoxa-live-search' ),
-				'description'    => __( 'When enabled, typing two printable characters in quick succession anywhere on the page (outside inputs) focuses the search field and inserts the typed text. Disabled by default; leave off if your theme or plugins use single-key shortcuts.', 'ninoxa-live-search' ),
+				'description'    => __( 'When enabled, typing two printable characters in quick succession anywhere on the page (outside inputs) focuses the search field and inserts the typed text. Keys are captured before the browser so this also works in Firefox when "Search for text when you start typing" is on. Disabled by default; leave off if your theme or plugins use single-key shortcuts.', 'ninoxa-live-search' ),
+			),
+			'focus_effects_enabled'   => array(
+				'section'        => 'general',
+				'label'          => __( 'Focus outline', 'ninoxa-live-search' ),
+				'type'           => 'checkbox',
+				'checkbox_label' => __( 'Show a focus outline and box shadow on the search field', 'ninoxa-live-search' ),
+				'description'    => __( 'Turn this off to keep your theme\'s focus styles instead of the plugin outline.', 'ninoxa-live-search' ),
 			),
 			'search_results_limit'    => array(
 				'section'           => 'general',
@@ -942,6 +967,6 @@ class Ninoxa_Live_Search_Settings {
 	 * @return string
 	 */
 	private function get_plugin_version() {
-		return defined( 'NINOXA_LIVE_SEARCH_VERSION' ) ? NINOXA_LIVE_SEARCH_VERSION : '1.3.3';
+		return defined( 'NINOXA_LIVE_SEARCH_VERSION' ) ? NINOXA_LIVE_SEARCH_VERSION : '1.3.4';
 	}
 }
