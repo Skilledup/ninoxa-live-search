@@ -1,0 +1,58 @@
+{
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/",
+	"preferredVersions": {
+		"php": "7.4",
+		"wp": "latest"
+	},
+	"features": {
+		"networking": true
+	},
+	"steps": [
+		{
+			"step": "installPlugin",
+			"pluginData": {
+				"resource": "wordpress.org/plugins",
+				"slug": "ninoxa-live-search"
+			},
+			"options": {
+				"activate": true
+			}
+		},
+		{
+			"step": "setSiteOptions",
+			"options": {
+				"blogname": "Ninoxa Live Search Demo",
+				"blogdescription": "Type in the search box to see instant AJAX results"
+			}
+		},
+		{
+			"step": "wp-cli",
+			"command": "wp post create --post_title='WordPress performance tips' --post_content='Improve your WordPress site speed with caching, image optimization, and lightweight themes.' --post_status=publish"
+		},
+		{
+			"step": "wp-cli",
+			"command": "wp post create --post_title='Block theme search experience' --post_content='Block themes include a header search form that works great with live search plugins.' --post_status=publish"
+		},
+		{
+			"step": "wp-cli",
+			"command": "wp post create --post_title='Fuzzy matching demo' --post_content='Try searching for helo to see fuzzy matching tolerate one-character typos.' --post_status=publish"
+		},
+		{
+			"step": "wp-cli",
+			"command": "wp post create --post_title='AJAX search without page reload' --post_content='Live search returns results instantly as you type, powered by admin-ajax.php.' --post_status=publish"
+		},
+		{
+			"step": "wp-cli",
+			"command": "wp post create --post_title='Keyboard navigation and accessibility' --post_content='Navigate results with arrow keys, switch matching modes, and use screen reader friendly ARIA attributes.' --post_status=publish"
+		},
+		{
+			"step": "wp-cli",
+			"command": "wp post create --post_title='Multilingual search compatibility' --post_content='Ninoxa Live Search supports Polylang and WPML for multilingual WordPress sites.' --post_status=publish"
+		},
+		{
+			"step": "runPHP",
+			"code": "<?php\nrequire '/wordpress/wp-load.php';\n$content = '<!-- wp:heading {\"level\":2} -->\n<h2 class=\"wp-block-heading\">Try Ninoxa Live Search</h2>\n<!-- /wp:heading -->\n\n<!-- wp:paragraph -->\n<p>Type at least 3 characters below to see instant AJAX results.</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:search {\"label\":\"Search\",\"showLabel\":false,\"placeholder\":\"Search posts...\",\"buttonText\":\"Search\",\"buttonUseIcon\":true} /-->';\n$page_id = wp_insert_post( array(\n\t'post_title'   => 'Home',\n\t'post_name'    => 'home',\n\t'post_content' => $content,\n\t'post_status'  => 'publish',\n\t'post_type'    => 'page',\n) );\nif ( $page_id && ! is_wp_error( $page_id ) ) {\n\tupdate_option( 'show_on_front', 'page' );\n\tupdate_option( 'page_on_front', $page_id );\n}\n$defaults = ( new ReflectionClass( 'Ninoxa_Live_Search_Options' ) )->getMethod( 'get_defaults' )->invoke( null );\n$settings = array_merge( $defaults, (array) get_option( 'ninoxa_live_search_settings', array() ) );\n$settings['search_match_any'] = '1';\n$settings['search_match_fuzzy'] = '1';\nupdate_option( 'ninoxa_live_search_settings', $settings );"
+		}
+	]
+}
