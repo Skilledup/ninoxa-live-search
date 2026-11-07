@@ -4,7 +4,7 @@ Tags: search, live search, ajax search, real-time search
 Requires at least: 5.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3.4
+Stable tag: 1.3.5
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -87,6 +87,9 @@ Yes. It works out of the box with standard WordPress search forms across all the
 
 == Changelog ==
 
+= 1.3.5 =
+* Fixed arrow-key navigation so the results list scrolls to keep the highlighted result in view.
+
 = 1.3.4 =
 * Fixed the search field focus outline disappearing while results are loading (the light sweep no longer clips it).
 * Added an optional focus outline setting so the plugin ring can be turned off in favor of the theme's focus styles.
@@ -134,6 +137,9 @@ Yes. It works out of the box with standard WordPress search forms across all the
 * Initial release.
 
 == Upgrade Notice ==
+
+= 1.3.5 =
+Keeps the highlighted search result in view when moving through results with the arrow keys.
 
 = 1.3.4 =
 Improves keyboard matching-mode shortcuts, keeps the search focus ring visible while loading, and fixes type-to-search in Firefox.
