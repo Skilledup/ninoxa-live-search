@@ -507,17 +507,25 @@ jQuery(document).ready(function ($) {
         $selectedItem.attr('id', selectedId);
         $input.attr('aria-activedescendant', selectedId);
 
-        // Scroll selected item into view
+        // Scroll the inner list; the outer panel is overflow:hidden.
         if ($selectedItem.length) {
-            const resultsContainer = $results[0];
-            const selectedElement = $selectedItem[0];
-            
-            if (selectedElement.offsetTop < resultsContainer.scrollTop) {
-                resultsContainer.scrollTop = selectedElement.offsetTop;
-            } else if (selectedElement.offsetTop + selectedElement.offsetHeight > 
-                      resultsContainer.scrollTop + resultsContainer.offsetHeight) {
-                resultsContainer.scrollTop = selectedElement.offsetTop + selectedElement.offsetHeight - resultsContainer.offsetHeight;
-            }
+            scrollSelectedResultIntoView($selectedItem[0]);
+        }
+    }
+
+    function scrollSelectedResultIntoView(selectedElement) {
+        const list = selectedElement.closest('.live-search-results-list');
+        if (!list) {
+            return;
+        }
+
+        const listRect = list.getBoundingClientRect();
+        const itemRect = selectedElement.getBoundingClientRect();
+
+        if (itemRect.top < listRect.top) {
+            list.scrollTop -= listRect.top - itemRect.top;
+        } else if (itemRect.bottom > listRect.bottom) {
+            list.scrollTop += itemRect.bottom - listRect.bottom;
         }
     }
 
